@@ -1,0 +1,783 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8" />
+		<title>物流仓库管理系统主页</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- basic styles -->
+		<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="assets/css/font-awesome.min.css" />
+
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+		<!-- page specific plugin styles -->
+
+		<!-- fonts 
+
+		<link rel="stylesheet" href="assets\css\cyrillic.css" />
+-->
+		<!-- ace styles -->
+
+		<link rel="stylesheet" href="assets/css/ace.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+
+		<script src="assets/js/ace-extra.min.js"></script>
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="assets/js/html5shiv.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+		<div class="navbar navbar-default" id="navbar">
+			<script type="text/javascript">
+				try{ace.settings.check('navbar' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="navbar-container" id="navbar-container">
+				<div class="navbar-header pull-left">
+					<a href="#" class="navbar-brand">
+						<small>
+							<i class="icon-leaf"></i>
+							物流仓库管理系统
+						</small>
+					</a><!-- /.brand -->
+				</div><!-- /.navbar-header -->
+
+				<div class="navbar-header pull-right" role="navigation">
+					
+					<ul class="nav ace-nav">
+
+						<li class="light-blue">
+							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+								<img class="nav-user-photo" src="assets/avatars/user.jpg" alt="Jason's Photo" />
+								<span class="user-info">
+									<small>欢迎光临,</small>
+									Jason
+								</span>
+
+								<i class="icon-caret-down"></i>
+							</a>
+
+							<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+								<li>
+									<a href="#">
+										<i class="icon-cog"></i>
+										设置
+									</a>
+								</li>
+
+								<li>
+									<a href="#">
+										<i class="icon-user"></i>
+										个人资料
+									</a>
+								</li>
+
+								<li class="divider"></li>
+
+								<li>
+									<a href="#">
+										<i class="icon-off"></i>
+										退出
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul><!-- /.ace-nav -->
+				</div><!-- /.navbar-header -->
+			</div><!-- /.container -->
+		</div>
+
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+
+				<div class="sidebar" id="sidebar">
+					<script type="text/javascript">
+						try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+					</script>
+
+					<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+
+						<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+							<span class="btn btn-success"></span>
+
+							<span class="btn btn-info"></span>
+
+							<span class="btn btn-warning"></span>
+
+							<span class="btn btn-danger"></span>
+						</div>
+					</div><!-- #sidebar-shortcuts -->
+
+					<ul class="nav nav-list">
+						<li class="active">
+							<a href="#">
+								<i class="icon-home"></i>
+								<span class="menu-text"> 主页 </span>
+							</a>
+						</li>
+
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-desktop" ></i>
+								<span class="menu-text"> 入库管理 </span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu" >
+								<li >
+									<a href="/applyin-getNotAllowApplyEnter?pagenum=1">
+										<i class="icon-double-angle-right"></i>
+										填写入库申请
+									</a>
+								</li>
+								<li>
+									<a href="/applyin-toBeEnsured?pagenum=1">
+										<i class="icon-double-angle-right"></i>
+										待处理的入库申请
+									</a>
+								</li>
+
+								<li>
+									<a href="/applyin-getHistory?pagenum=1">
+										<i class="icon-double-angle-right"></i>
+										历史入库申请
+									</a>
+								</li>
+							</ul>
+						</li>
+
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-list"></i>
+								<span class="menu-text"> 出库管理 </span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="/applyout-getNotAllowed?pagenum=1">
+										<i class="icon-double-angle-right"></i>
+										填写出库申请
+									</a>
+								</li>
+								<li>
+									<a href="/applyout-getToBeEnsured?pagenum=1">
+										<i class="icon-double-angle-right"></i>
+										待处理的出库申请
+									</a>
+								</li>
+								<li>
+									<a href="/applyout-getHistory?pagenum=1">
+										<i class="icon-double-angle-right"></i>
+										历史出库申请
+									</a>
+								</li>
+
+							</ul>
+						</li>
+
+
+     					<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-edit"></i>
+								<span class="menu-text"> 供货、提货商管理 </span>
+								<b class="arrow icon-angle-down"></b>
+							</a>
+							<ul class="submenu">
+								<li>
+									<a href="/relationship-findAll?pagenum=1">
+										<i class="icon-double-angle-right"></i>
+										关系管理
+									</a>
+								</li>
+
+							</ul>
+						</li>
+						
+						
+						<!--<li>-->
+							<!--<a href="#" class="dropdown-toggle">-->
+								<!--<i class="icon-book"></i>-->
+								<!--<span class="menu-text"> 库位管理 </span>-->
+
+								<!--<b class="arrow icon-angle-down"></b>-->
+							<!--</a>-->
+
+							<!--<ul class="submenu">-->
+								<!--<li>-->
+									<!--<a href="location_detail.html">-->
+										<!--<i class="icon-double-angle-right"></i>-->
+										<!--库位详情-->
+									<!--</a>-->
+								<!--</li>-->
+
+							<!--</ul>-->
+						<!--</li>-->
+
+
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-exchange"></i>
+								<span class="menu-text"> 库存管理 </span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="/entrepot-list?pagenum=1">
+										<i class="icon-double-angle-right"></i>
+										库存材料列表
+									</a>
+								</li>
+
+							</ul>
+						</li>
+
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-credit-card"></i>
+								<span class="menu-text"> 报表信息 </span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="/report-exitInfo">
+										<i class="icon-double-angle-right"></i> 出库报表信息
+									</a>
+								</li>
+								<li>
+									<a href="/report-entranceInfo">
+										<i class="icon-double-angle-right"></i> 入库报表信息
+									</a>
+								</li>
+								<li>
+									<a href="/report-onSend">
+										<i class="icon-double-angle-right"></i> 货物在途报表信息
+									</a>
+								</li>
+
+								<li>
+									<a href="/report-store">
+										<i class="icon-double-angle-right"></i>
+										库存报表信息
+									</a>
+								</li>
+								<li>
+									<a href="/report-toSendForm">
+										<i class="icon-double-angle-right"></i> 生成出货单
+									</a>
+								</li>
+							</ul>
+						</li>
+
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-group"></i>
+								<span class="menu-text"> 用户管理</span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="/user-getAll?pagenum=1">
+										<i class="icon-double-angle-right"></i>
+										用户列表
+									</a>
+								</li>
+							</ul>
+						</li>
+
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-bar-chart"></i>
+								<span class="menu-text"> 统计详情 </span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="statistic_one.html">
+										<i class="icon-double-angle-right"></i>
+										统计图示一
+									</a>
+								</li>
+
+								<li>
+									<a href="statistic_two.html">
+										<i class="icon-double-angle-right"></i>
+										统计图示二
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-asterisk"></i>
+								<span class="menu-text">标签制作管理</span>
+
+								<b class="arrow icon-angle-down"></b>
+							</a>
+
+							<ul class="submenu">
+								<li>
+									<a href="label_made.html">
+										<i class="icon-double-angle-right"></i>
+										标签制作
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul><!-- /.nav-list -->
+
+					<div class="sidebar-collapse" id="sidebar-collapse">
+						<i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+					</div>
+
+					<script type="text/javascript">
+						try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+					</script>
+				</div>
+
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="#">主页</a>
+							</li>
+						</ul><!-- .breadcrumb -->
+					</div>
+					<div class="page-content">
+						<div class="row">
+							<div class="col-xs-12">
+
+								<div class="row">
+									<div class="space-6"></div>
+
+									<div class="col-sm-7 infobox-container">
+										<div class="infobox infobox-red  ">
+											<div class="infobox-icon">
+												<i class="icon-beaker"></i>
+											</div>
+
+											<div class="infobox-data">
+												<span class="infobox-data-number" th:text="${enterSize}"></span>
+												<div class="infobox-content">昨日入库数</div>
+											</div>
+										</div>
+
+										<div class="infobox infobox-blue  ">
+											<div class="infobox-icon">
+												<i class="icon-twitter"></i>
+											</div>
+
+											<div class="infobox-data">
+												<span class="infobox-data-number" th:text="${outSize}"></span>
+												<div class="infobox-content">昨日出库数</div>
+											</div>
+
+										</div>
+
+										<div class="infobox infobox-pink  ">
+											<div class="infobox-icon">
+												<i class="icon-shopping-cart"></i>
+											</div>
+
+											<div class="infobox-data">
+												<span class="infobox-data-number" th:text="${entrepotSize}"></span>
+												<div class="infobox-content">库存总数</div>
+											</div>
+										</div>
+										<div class="space-6"></div>
+
+									</div>
+
+									<div class="vspace-sm"></div>
+
+									<div class="col-sm-5">
+										<div class="widget-box">
+											<div class="widget-header widget-header-flat widget-header-small">
+												<h5>
+													<i class="icon-signal"></i>
+													库存类别统计
+												</h5>
+
+												<div class="widget-toolbar no-border">
+													<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown">
+														本周
+														<i class="icon-angle-down icon-on-right bigger-110"></i>
+													</button>
+
+													<ul class="dropdown-menu pull-right dropdown-125 dropdown-lighter dropdown-caret">
+														<li class="active">
+															<a href="#" class="blue">
+																<i class="icon-caret-right bigger-110">&nbsp;</i>
+																本周
+															</a>
+														</li>
+
+														<li>
+															<a href="#">
+																<i class="icon-caret-right bigger-110 invisible">&nbsp;</i>
+																上周
+															</a>
+														</li>
+
+														<li>
+															<a href="#">
+																<i class="icon-caret-right bigger-110 invisible">&nbsp;</i>
+																本月
+															</a>
+														</li>
+
+														<li>
+															<a href="#">
+																<i class="icon-caret-right bigger-110 invisible">&nbsp;</i>
+																上月
+															</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+
+										</div><!-- /widget-box -->
+									</div><!-- /span -->
+								</div><!-- /row -->
+
+								<div class="hr hr32 hr-dotted"></div>
+
+
+									<div class="col-sm-7">
+										<div class="widget-box transparent">
+											<div class="widget-header widget-header-flat">
+												<h4 class="lighter">
+													<i class="icon-signal"></i>
+													库存变化数量图
+												</h4>
+
+												<div class="widget-toolbar">
+													<a href="#" data-action="collapse">
+														<i class="icon-chevron-up"></i>
+													</a>
+												</div>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main padding-4">
+													<div id="sales-charts"></div>
+												</div><!-- /widget-main -->
+											</div><!-- /widget-body -->
+										</div><!-- /widget-box -->
+									</div>
+								</div>
+
+								<div class="hr hr32 hr-dotted"></div>
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+
+				<div class="ace-settings-container" id="ace-settings-container">
+					<div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
+						<i class="icon-cog bigger-150"></i>
+					</div>
+
+					<div class="ace-settings-box" id="ace-settings-box">
+						<div>
+							<div class="pull-left">
+								<select id="skin-colorpicker" class="hide">
+									<option data-skin="default" value="#438EB9">#438EB9</option>
+									<option data-skin="skin-1" value="#222A2D">#222A2D</option>
+									<option data-skin="skin-2" value="#C6487E">#C6487E</option>
+									<option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+								</select>
+							</div>
+							<span>&nbsp; 选择皮肤</span>
+						</div>
+
+
+						<div>
+							<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl" />
+							<label class="lbl" for="ace-settings-rtl">切换到左边</label>
+						</div>
+					</div>
+				</div><!-- /#ace-settings-container -->
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		<script src="assets\js\jquery-2.0.3.min.js"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+        <script src="assets\js\jquery-1.10.2.min.js"></script>
+         <![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='assets/js/jquery-2.0.3.min.js'>"+"<"+"script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+        <script type="text/javascript">
+         window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+        </script>
+        <![endif]-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"script>");
+		</script>
+		<script src="assets/js/bootstrap.min.js"></script>
+		<script src="assets/js/typeahead-bs2.min.js"></script>
+
+		<!-- ace scripts -->
+
+		<script src="assets/js/ace-elements.min.js"></script>
+		<script src="assets/js/ace.min.js"></script>
+
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript">
+            jQuery(function($) {
+                $('.easy-pie-chart.percentage').each(function(){
+                    var $box = $(this).closest('.infobox');
+                    var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
+                    var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
+                    var size = parseInt($(this).data('size')) || 50;
+                    $(this).easyPieChart({
+                        barColor: barColor,
+                        trackColor: trackColor,
+                        scaleColor: false,
+                        lineCap: 'butt',
+                        lineWidth: parseInt(size/10),
+                        animate: /msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()) ? false : 1000,
+                        size: size
+                    });
+                })
+
+                $('.sparkline').each(function(){
+                    var $box = $(this).closest('.infobox');
+                    var barColor = !$box.hasClass('infobox-dark') ? $box.css('color') : '#FFF';
+                    $(this).sparkline('html', {tagValuesAttribute:'data-values', type: 'bar', barColor: barColor , chartRangeMin:$(this).data('min') || 0} );
+                });
+
+
+
+
+                var placeholder = $('#piechart-placeholder').css({'width':'90%' , 'min-height':'150px'});
+                var data = [
+                    { label: "social networks",  data: 38.7, color: "#68BC31"},
+                    { label: "search engines",  data: 24.5, color: "#2091CF"},
+                    { label: "ad campaigns",  data: 8.2, color: "#AF4E96"},
+                    { label: "direct traffic",  data: 18.6, color: "#DA5430"},
+                    { label: "other",  data: 10, color: "#FEE074"}
+                ]
+                function drawPieChart(placeholder, data, position) {
+                    $.plot(placeholder, data, {
+                        series: {
+                            pie: {
+                                show: true,
+                                tilt:0.8,
+                                highlight: {
+                                    opacity: 0.25
+                                },
+                                stroke: {
+                                    color: '#fff',
+                                    width: 2
+                                },
+                                startAngle: 2
+                            }
+                        },
+                        legend: {
+                            show: true,
+                            position: position || "ne",
+                            labelBoxBorderColor: null,
+                            margin:[-30,15]
+                        }
+                        ,
+                        grid: {
+                            hoverable: true,
+                            clickable: true
+                        }
+                    })
+                }
+                drawPieChart(placeholder, data);
+
+                /**
+                 we saved the drawing function and the data to redraw with different position later when switching to RTL mode dynamically
+                 so that's not needed actually.
+                 */
+                placeholder.data('chart', data);
+                placeholder.data('draw', drawPieChart);
+
+
+
+                var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+                var previousPoint = null;
+
+                placeholder.on('plothover', function (event, pos, item) {
+                    if(item) {
+                        if (previousPoint != item.seriesIndex) {
+                            previousPoint = item.seriesIndex;
+                            var tip = item.series['label'] + " : " + item.series['percent']+'%';
+                            $tooltip.show().children(0).text(tip);
+                        }
+                        $tooltip.css({top:pos.pageY + 10, left:pos.pageX + 10});
+                    } else {
+                        $tooltip.hide();
+                        previousPoint = null;
+                    }
+
+                });
+
+
+
+
+
+
+                var d1 = [];
+                for (var i = 0; i < Math.PI * 2; i += 0.5) {
+                    d1.push([i, Math.sin(i)]);
+                }
+
+                var d2 = [];
+                for (var i = 0; i < Math.PI * 2; i += 0.5) {
+                    d2.push([i, Math.cos(i)]);
+                }
+
+                var d3 = [];
+                for (var i = 0; i < Math.PI * 2; i += 0.2) {
+                    d3.push([i, Math.tan(i)]);
+                }
+
+
+                var sales_charts = $('#sales-charts').css({'width':'100%' , 'height':'220px'});
+                $.plot("#sales-charts", [
+                    { label: "Domains", data: d1 },
+                    { label: "Hosting", data: d2 },
+                    { label: "Services", data: d3 }
+                ], {
+                    hoverable: true,
+                    shadowSize: 0,
+                    series: {
+                        lines: { show: true },
+                        points: { show: true }
+                    },
+                    xaxis: {
+                        tickLength: 0
+                    },
+                    yaxis: {
+                        ticks: 10,
+                        min: -2,
+                        max: 2,
+                        tickDecimals: 3
+                    },
+                    grid: {
+                        backgroundColor: { colors: [ "#fff", "#fff" ] },
+                        borderWidth: 1,
+                        borderColor:'#555'
+                    }
+                });
+
+
+                $('#recent-box [data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+                function tooltip_placement(context, source) {
+                    var $source = $(source);
+                    var $parent = $source.closest('.tab-content')
+                    var off1 = $parent.offset();
+                    var w1 = $parent.width();
+
+                    var off2 = $source.offset();
+                    var w2 = $source.width();
+
+                    if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+                    return 'left';
+                }
+
+
+                $('.dialogs,.comments').slimScroll({
+                    height: '300px'
+                });
+
+
+                //Android's default browser somehow is confused when tapping on label which will lead to dragging the task
+                //so disable dragging when clicking on label
+                var agent = navigator.userAgent.toLowerCase();
+                if("ontouchstart" in document && /applewebkit/.test(agent) && /android/.test(agent))
+                    $('#tasks').on('touchstart', function(e){
+                        var li = $(e.target).closest('#tasks li');
+                        if(li.length == 0)return;
+                        var label = li.find('label.inline').get(0);
+                        if(label == e.target || $.contains(label, e.target)) e.stopImmediatePropagation() ;
+                    });
+
+                $('#tasks').sortable({
+                        opacity:0.8,
+                        revert:true,
+                        forceHelperSize:true,
+                        placeholder: 'draggable-placeholder',
+                        forcePlaceholderSize:true,
+                        tolerance:'pointer',
+                        stop: function( event, ui ) {//just for Chrome!!!! so that dropdowns on items don't appear below other items after being moved
+                            $(ui.item).css('z-index', 'auto');
+                        }
+                    }
+                );
+                $('#tasks').disableSelection();
+                $('#tasks input:checkbox').removeAttr('checked').on('click', function(){
+                    if(this.checked) $(this).closest('li').addClass('selected');
+                    else $(this).closest('li').removeClass('selected');
+                });
+
+
+            })
+		</script>
+
+	</body>
+    </body>
+</html>
+
