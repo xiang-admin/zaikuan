@@ -1,8 +1,11 @@
 package com.pro.warehouse.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.pro.warehouse.Service.ExcelService;
+import com.pro.warehouse.Service.LogService;
 import com.pro.warehouse.constant.ApplyStatus;
+import com.pro.warehouse.constant.Operation;
 import com.pro.warehouse.constant.ResultCode;
 import com.pro.warehouse.dao.ApplyEnterRepository;
 import com.pro.warehouse.dao.CommonRepository;
@@ -70,6 +73,8 @@ public class ApplyEnterController {
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private CommonRepository<ApplyEnter> commonRepository;
+    @Autowired
+    private LogService logService;
 
 
     private Integer pagesize = 20;//每页显示的条数
@@ -162,6 +167,7 @@ public class ApplyEnterController {
         applyEnter.setApplyDate(new Date());
         System.err.println("插入数据" + applyEnter);
         applyEnterRepository.save(applyEnter);
+        logService.saveOpLog(user.getUsername(), Operation.APPLY_ENTER.getOperation(),"成功", JSON.toJSONString(applyEnter));
         String page = "entrance_apply_wait";
         return "redirect:/applyin-getNotAllowApplyEnter?pagenum=1";
     }
@@ -196,6 +202,7 @@ public class ApplyEnterController {
         entrepotStatus.setTaxCode(apply.getBillNumber());//发票号码
         entrepotStatus.setPosition(apply.getPosition());
         entrepotStatusRepository.save(entrepotStatus);
+        logService.saveOpLog(user.getUsername(), Operation.ENSURE_ENTER.getOperation(),"成功", JSON.toJSONString(apply));
         return "redirect:/applyin-toBeEnsured?pagenum=1";
     }
 
@@ -214,6 +221,7 @@ public class ApplyEnterController {
         apply.setEnsurePersonId(user.getUsername());
         //更新
         applyEnterRepository.save(apply);
+        logService.saveOpLog(user.getUsername(), Operation.REFUSE_ENTER.getOperation(),"成功", JSON.toJSONString(apply));
         return "redirect:/applyin-toBeEnsured?pagenum=1";
     }
 
@@ -227,6 +235,7 @@ public class ApplyEnterController {
         ApplyEnter applyEnter = applyEnterRepository.findApplyEnterByenterId(enterId);
 
         applyEnterRepository.delete(applyEnter);
+        logService.saveOpLog(user.getUsername(), Operation.DELETE_APPLY_ENTER.getOperation(),"成功", JSON.toJSONString(applyEnter));
         return "redirect:/applyin-getNotAllowApplyEnter?pagenum=1";
     }
 
@@ -240,6 +249,7 @@ public class ApplyEnterController {
         ApplyEnter applyEnter = applyEnterRepository.findApplyEnterByenterId(enterId);
 
         applyEnterRepository.delete(applyEnter);
+        logService.saveOpLog(user.getUsername(), Operation.DELETE_APPLY_ENTER_HIS.getOperation(),"成功", JSON.toJSONString(applyEnter));
         return "redirect:/applyin-getHistory?pagenum=1";
     }
 
@@ -325,6 +335,7 @@ public class ApplyEnterController {
     @RequestMapping(value = "/applyin-batchApply")
     public String batchApply(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws InstantiationException, IllegalAccessException {
         List<ApplyEnter> applyEnters = excelService.ImportExcelService(file, new ApplyEnter());
+        User user1 = (User) request.getSession().getAttribute("user");
         logger.debug(new Date()+"批量导入入库申请："+new Gson().toJson(applyEnters));
         String success = "";
         for(ApplyEnter applyEnter:applyEnters){
@@ -335,6 +346,7 @@ public class ApplyEnterController {
             applyEnterRepository.save(applyEnter);
             success = success+applyEnter.getEnterCode()+"--";
         }
+        logService.saveOpLog(user1.getUsername(), Operation.APPLY_ENTER_BATCH.getOperation(),"成功", JSON.toJSONString(applyEnters));
         request.getSession().setAttribute("message","导入成功的记录(入库编号)："+success);
         return "redirect:/applyin-getNotAllowApplyEnter?pagenum=1";
     }

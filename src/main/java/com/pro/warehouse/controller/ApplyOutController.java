@@ -1,9 +1,12 @@
 package com.pro.warehouse.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.pro.warehouse.Service.EntrepotStatusService;
 import com.pro.warehouse.Service.ExcelService;
+import com.pro.warehouse.Service.LogService;
 import com.pro.warehouse.constant.ApplyStatus;
+import com.pro.warehouse.constant.Operation;
 import com.pro.warehouse.dao.ApplyEnterRepository;
 import com.pro.warehouse.dao.ApplyOutPutRepository;
 import com.pro.warehouse.dao.CommonRepository;
@@ -61,6 +64,8 @@ public class ApplyOutController {
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private CommonRepository<ApplyOutPut> commonRepository;
+    @Autowired
+    private LogService logService;
     private Integer pagesize = 20;//每页显示的条数
 
     /**
@@ -186,7 +191,7 @@ public class ApplyOutController {
         } else {
             request.getSession().setAttribute("message", "仓库没有要申请出库的货物");
         }
-
+        logService.saveOpLog(user.getUsername(), Operation.APPLY_OUT.getOperation(),"成功", JSON.toJSONString(applyOutPut));
 
         return "redirect:/applyout-getNotAllowed?pagenum=1";
     }
@@ -200,7 +205,8 @@ public class ApplyOutController {
         String page = "exit_apply_wait";
         //根据id查找出库申请
         ApplyOutPut output = applyOutPutRepository.findApplyOutPutById(id);
-
+        String result = "失败";
+        String detail = "";
         //获取料号
         String materialCode = output.getMaterialCode();
         //获取仓位
@@ -220,6 +226,7 @@ public class ApplyOutController {
             output.setApplyPersonid(user.getUsername());
             output.setApplyDate(new Date());
             request.getSession().setAttribute("message","库存中没有该货物");
+            detail = "库存中没有该货物";
         }
         //入库编号和料号可以确定货物，所以查找到的供货商时相同的
         if (output.getDemandName().equals(entrepotStatus.get(0).getSupplyName())) {
@@ -238,16 +245,20 @@ public class ApplyOutController {
                 //修改出库申请状态
                 output.setStatus(ApplyStatus.TURN_BACK);
                 request.getSession().setAttribute("message","退回申请成功:退回-"+output.getSize()+",还剩不良品-"+badGodds.getTotalSize());
+                result = "成功";
+                detail = "退回申请成功:退回-"+output.getSize()+",还剩不良品-"+badGodds.getTotalSize();
             }else if(badGodds.getTotalSize()==output.getSize()){
                 //库存大于申请，出库并删除记录
                 entrepotStatusRepository.delete(badGodds);
                 output.setStatus(ApplyStatus.TURN_BACK);
                 request.getSession().setAttribute("message","退回申请成功");
+                result = "成功";
+                detail = "退回申请：";
             }else{
                 //库存小于申请，返回异常值
                 output.setStatus(ApplyStatus.REFUSED);
                 request.getSession().setAttribute("message","申请数量大于库存，已自动拒绝");
-
+                detail = "申请数量大于库存，已自动拒绝";
             }
             //如果提供商和提货商相同,则表示不良品退回
             //更新入库申请状态
@@ -275,22 +286,27 @@ public class ApplyOutController {
                 //修改出库申请状态
                 output.setStatus(ApplyStatus.ENSURE);
                 request.getSession().setAttribute("message","申请出库成功");
+                result="成功";
+                detail="申请出库成功:";
             }else if(goodGodds.getTotalSize()==output.getSize()){
                 //库存大于申请，出库并删除记录
                 entrepotStatusRepository.delete(goodGodds);
                 output.setStatus(ApplyStatus.ENSURE);
                 request.getSession().setAttribute("message","申请出库成功");
+                result="成功";
+                detail="申请出库成功:";
             }else{
                 //库存小于申请，返回异常值
                 output.setStatus(ApplyStatus.REFUSED);
                 request.getSession().setAttribute("message","申请数量大于库存，已自动拒绝");
-
+                detail="申请数量大于库存，已自动拒绝";
             }
             //如果提供商和提货商相同,则表示不良品退回
             //更新出库申请状态
             output.setEnsurePersonid(user.getUsername());
             output.setApplyDate(new Date());
             applyOutPutRepository.save(output);
+            logService.saveOpLog(user.getUsername(), Operation.ENSURE_ENTER.getOperation(),result, detail+JSON.toJSONString(output));
         }
         return "redirect:/applyout-getToBeEnsured?pagenum=1";
     }
@@ -298,7 +314,7 @@ public class ApplyOutController {
 
 
     /**
-     * 审核入库申请(将状态改为“已确认”，并增加确认人的id，前台显示以名称显示)
+     * 拒绝
      */
     @RequestMapping("/applyout-turndown")
     public String turndown(int id, HttpServletRequest request) {
@@ -309,6 +325,7 @@ public class ApplyOutController {
         output.setEnsurePersonid(user.getUsername());
         //更新
         applyOutPutRepository.save(output);
+        logService.saveOpLog(user.getUsername(), Operation.REFUSE_OUT.getOperation(),"成功", JSON.toJSONString(output));
         return "redirect:/applyout-getToBeEnsured?pagenum=1";
     }
 
@@ -320,6 +337,7 @@ public class ApplyOutController {
         User user = (User) request.getSession().getAttribute("user");
         ApplyOutPut applyOutPut = applyOutPutRepository.findApplyOutPutById(enterId);
         applyOutPutRepository.delete(applyOutPut);
+        logService.saveOpLog(user.getUsername(), Operation.DELETE_APPLY_OUT.getOperation(),"成功", JSON.toJSONString(applyOutPut));
         return "redirect:/applyout-getNotAllowed?pagenum=1";
     }
 
@@ -332,6 +350,7 @@ public class ApplyOutController {
         User user = (User) request.getSession().getAttribute("user");
         ApplyOutPut applyOutPut = applyOutPutRepository.findApplyOutPutById(enterId);
         applyOutPutRepository.delete(applyOutPut);
+        logService.saveOpLog(user.getUsername(), Operation.DELETE_APPLY_OUT_HIS.getOperation(),"成功", JSON.toJSONString(applyOutPut));
         return "redirect:/applyout-getHistory?pagenum=1";
     }
 
@@ -344,6 +363,7 @@ public class ApplyOutController {
         List<ApplyOutPut> applyOutPuts = excelService.ImportExcelService(file, new ApplyOutPut());
         logger.debug(new Date()+"批量导入出库申请："+new Gson().toJson(applyOutPuts));
         String success = "";
+        User user1 = (User) request.getSession().getAttribute("user");
         for(ApplyOutPut applyOutPut:applyOutPuts){
             User user = (User) request.getSession().getAttribute("user");
             applyOutPut.setApplyPersonid(user.getUsername());
@@ -352,6 +372,7 @@ public class ApplyOutController {
             applyOutPutRepository.save(applyOutPut);
             success = success+applyOutPut.getEnterCode()+"--";
         }
+        logService.saveOpLog(user1.getUsername(), Operation.APPLY_OUT_BATCH.getOperation(),"成功", JSON.toJSONString(applyOutPuts));
         request.getSession().setAttribute("message","导入成功的记录(入库编号)："+success);
         return "redirect:/applyout-getNotAllowed?pagenum=1";
     }
