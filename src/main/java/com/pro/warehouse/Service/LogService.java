@@ -27,7 +27,7 @@ public class LogService {
         logOperation.setUsername(username);
         logOperation.setResult(result);
         logOperation.setOperation(operation);
-        logOperation.setDetail(detail.substring(0,2047));
+        logOperation.setDetail(detail.substring(0,1023));
         logOperation.setDate(new Date());
         logOperationRepository.save(logOperation);
     }
@@ -38,7 +38,7 @@ public class LogService {
      */
     public void saveSysLog(String logMessage){
        LogSystem logSystem = new LogSystem();
-       logSystem.setLogMessage(logMessage.substring(0,2047));
+       logSystem.setLogMessage(logMessage.substring(0,1023));
        logSystem.setLogDate(new Date());
        logSystemRepository.save(logSystem);
     }

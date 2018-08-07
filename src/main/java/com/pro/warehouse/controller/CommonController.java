@@ -20,8 +20,4 @@ public class CommonController {
         return "send_goods_form";
     }
 
-    public String toErrorPage(){
-
-        return "error-500";
-    }
 }

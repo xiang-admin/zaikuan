@@ -1,6 +1,7 @@
 package com.pro.warehouse.controller;
 
 import com.pro.warehouse.Service.LogService;
+import com.pro.warehouse.exception.StoreException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.Timestamp;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -34,6 +36,22 @@ public class AccessController {
         Map model = new TreeMap();
         model.put("status",false);
         model.put("message",localizedMessage);
+        return model;
+    }
+
+    /**
+     * 页面异常处理方法
+     * @param storeException
+     * @return
+     */
+    @ExceptionHandler(StoreException.class)
+    public @ResponseBody Map<String,Object> storeExceptionHandler(StoreException storeException){
+        final String localizedMessage =  getExceptionAllinformation_01(storeException);
+        logService.saveSysLog(localizedMessage.substring(0,1023));
+        Map model = new TreeMap();
+        model.put("status",false);
+        model.put("message",storeException.getMessage());
+        model.put("timestamp",new Timestamp(System.currentTimeMillis()));
         return model;
     }
 

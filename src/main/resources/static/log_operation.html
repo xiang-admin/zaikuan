@@ -419,37 +419,37 @@
                 </ul>
                 <!-- .breadcrumb -->
             </div>
-            <form action="/report-makeOnSendReport" id="storeDate">
-                <div style="float: left;font-size: 25px;">截止至：</div>
-                <div style="float: left;"><input th:value="${date}" type="date" name="endDate" id="endDate"/></div>
+            <!--<form action="/report-makeOnSendReport" id="storeDate">-->
+                <!--<div style="float: left;font-size: 25px;">截止至：</div>-->
+                <!--<div style="float: left;"><input th:value="${date}" type="date" name="endDate" id="endDate"/></div>-->
 
-                <div style="float: left;">
-                    <button type="submit" class="btn btn-primary active" data-toggle="button" style="height: 35px;" onclick="submitForm()">生成报表</button>
-                    <button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="toExcel()" >导出Excek</button>
-                </div>
-            </form>
-            <script>
-                function submitForm(){
-                    var form = document.getElementById('storeDate');
-                    var date = $("#endDate").val();
-                    if(date==null||date=="") {
-                        alert("先选择日期");
-                    }else{
-                        form.submit();
-                    }
-                }
+                <!--<div style="float: left;">-->
+                    <!--<button type="submit" class="btn btn-primary active" data-toggle="button" style="height: 35px;" onclick="submitForm()">生成报表</button>-->
+                    <!--<button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="toExcel()" >导出Excek</button>-->
+                <!--</div>-->
+            <!--</form>-->
+            <!--<script>-->
+                <!--function submitForm(){-->
+                    <!--var form = document.getElementById('storeDate');-->
+                    <!--var date = $("#endDate").val();-->
+                    <!--if(date==null||date=="") {-->
+                        <!--alert("先选择日期");-->
+                    <!--}else{-->
+                        <!--form.submit();-->
+                    <!--}-->
+                <!--}-->
 
-                function toExcel(){
-                    var date = $("#endDate").val();
-                    if(date==null||date=="") {
-                        alert("先选择日期");
-                    }else{
-                        var url="/report-onSendReportToExcel?date="+date;
-                        window.location.href=url;
+                <!--function toExcel(){-->
+                    <!--var date = $("#endDate").val();-->
+                    <!--if(date==null||date=="") {-->
+                        <!--alert("先选择日期");-->
+                    <!--}else{-->
+                        <!--var url="/report-onSendReportToExcel?date="+date;-->
+                        <!--window.location.href=url;-->
 
-                    }
-                }
-            </script>
+                    <!--}-->
+                <!--}-->
+            <!--</script>-->
             <div style="height: 50px">
 
             </div>

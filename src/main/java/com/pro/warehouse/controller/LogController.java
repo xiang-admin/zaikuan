@@ -42,7 +42,7 @@ public class LogController {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        sql.append(" 1 = 1");
+        sql.append(" 1 = 1 ORDER BY date DESC");
         int totalpage = jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper(LogOperation.class)).size();
         sql.append(" LIMIT " + (pagenum - 1) * pagesize + "," + pagesize);
         List<LogOperation> operations = jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper(LogOperation.class));
@@ -61,7 +61,7 @@ public class LogController {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        sql.append(" 1 = 1");
+        sql.append(" 1 = 1 ORDER BY logDate DESC");
         int totalpage = jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper(LogSystem.class)).size();
         sql.append(" LIMIT " + (pagenum - 1) * pagesize + "," + pagesize);
         List<LogSystem> operations = jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper(LogSystem.class));
