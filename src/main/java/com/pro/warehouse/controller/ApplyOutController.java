@@ -11,6 +11,7 @@ import com.pro.warehouse.dao.ApplyEnterRepository;
 import com.pro.warehouse.dao.ApplyOutPutRepository;
 import com.pro.warehouse.dao.CommonRepository;
 import com.pro.warehouse.dao.EntrepotStatusRepository;
+import com.pro.warehouse.exception.StoreException;
 import com.pro.warehouse.pojo.ApplyEnter;
 import com.pro.warehouse.pojo.ApplyOutPut;
 import com.pro.warehouse.pojo.EntrepotStatus;
@@ -107,8 +108,8 @@ public class ApplyOutController {
         String page = "exit_apply";
         //获得当前登陆用户的ID
         User user = (User) request.getSession().getAttribute("user");
-        if (user == null) {
-            throw new Exception("用户未登录");
+        if(user==null){
+            throw new StoreException("用户尚未登录");
         }
         Long userId = user.getId();
         if (applyOutPut != null) {
@@ -173,8 +174,8 @@ public class ApplyOutController {
     @RequestMapping(value = "/applyout-addapply", method = {RequestMethod.GET, RequestMethod.POST})
     public String saveApply(ApplyOutPut applyOutPut, BindingResult bindingResult, HttpServletRequest request, ModelMap modelMap) throws Exception {
         User user = (User) request.getSession().getAttribute("user");
-        if (user == null) {
-            throw new Exception("尚未登录");
+        if(user==null){
+            throw new StoreException("用户尚未登录");
         }
         Long userId = user.getId();
         applyOutPut.setApplyPersonid(user.getUsername());
@@ -333,8 +334,11 @@ public class ApplyOutController {
      * 根据ID删除
      */
     @RequestMapping(value = "/applyout-deleteById",method = {RequestMethod.POST,RequestMethod.GET})
-    public String deleteApplyById(int enterId, HttpServletRequest request) {
+    public String deleteApplyById(int enterId, HttpServletRequest request) throws StoreException {
         User user = (User) request.getSession().getAttribute("user");
+        if(user==null){
+            throw new StoreException("用户尚未登录");
+        }
         ApplyOutPut applyOutPut = applyOutPutRepository.findApplyOutPutById(enterId);
         applyOutPutRepository.delete(applyOutPut);
         logService.saveOpLog(user.getUsername(), Operation.DELETE_APPLY_OUT.getOperation(),"成功", JSON.toJSONString(applyOutPut));
@@ -346,8 +350,11 @@ public class ApplyOutController {
      * 根据ID删除
      */
     @RequestMapping(value = "/applyout-his-deleteById",method = {RequestMethod.POST,RequestMethod.GET})
-    public String deleteHisApplyById(int enterId, HttpServletRequest request) {
+    public String deleteHisApplyById(int enterId, HttpServletRequest request) throws StoreException {
         User user = (User) request.getSession().getAttribute("user");
+        if(user==null){
+            throw new StoreException("用户尚未登录");
+        }
         ApplyOutPut applyOutPut = applyOutPutRepository.findApplyOutPutById(enterId);
         applyOutPutRepository.delete(applyOutPut);
         logService.saveOpLog(user.getUsername(), Operation.DELETE_APPLY_OUT_HIS.getOperation(),"成功", JSON.toJSONString(applyOutPut));
@@ -359,11 +366,14 @@ public class ApplyOutController {
      * 批量申请
      */
     @RequestMapping(value = "/applyout-batchApply")
-    public String batchApply(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws InstantiationException, IllegalAccessException {
+    public String batchApply(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws InstantiationException, IllegalAccessException, StoreException {
         List<ApplyOutPut> applyOutPuts = excelService.ImportExcelService(file, new ApplyOutPut());
         logger.debug(new Date()+"批量导入出库申请："+new Gson().toJson(applyOutPuts));
         String success = "";
         User user1 = (User) request.getSession().getAttribute("user");
+        if(user1==null){
+            throw new StoreException("用户尚未登录");
+        }
         for(ApplyOutPut applyOutPut:applyOutPuts){
             User user = (User) request.getSession().getAttribute("user");
             applyOutPut.setApplyPersonid(user.getUsername());

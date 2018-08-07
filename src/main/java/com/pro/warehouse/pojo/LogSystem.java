@@ -12,7 +12,7 @@ public class LogSystem {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private int logRid;//id
 
-    @Column(length = 2048)
+    @Column(length = 1024)
     private String logMessage;//日志内容
 
     private Date logDate;//日志记录时间

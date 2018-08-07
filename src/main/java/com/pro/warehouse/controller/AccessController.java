@@ -27,10 +27,10 @@ public class AccessController {
      * @param runtimeException
      * @return
      */
-    @ExceptionHandler(RuntimeException.class)
-    public @ResponseBody Map<String,Object> runtimeExceptionHandler(RuntimeException runtimeException){
+    @ExceptionHandler(Exception.class)
+    public @ResponseBody Map<String,Object> runtimeExceptionHandler(Exception runtimeException){
         final String localizedMessage =  getExceptionAllinformation_01(runtimeException);
-        logService.saveSysLog(localizedMessage);
+        logService.saveSysLog(localizedMessage.substring(0,1023));
         Map model = new TreeMap();
         model.put("status",false);
         model.put("message",localizedMessage);

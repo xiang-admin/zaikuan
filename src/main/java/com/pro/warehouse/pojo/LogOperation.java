@@ -14,7 +14,7 @@ public class LogOperation {
     private String operation;//操作
 
     private String result;//结果
-    @Column(length = 2048)
+    @Column(length = 1024)
     private String detail;//详情
 
     private Date date;

@@ -1,6 +1,6 @@
 package com.pro.warehouse.Service;
 
-import com.pro.warehouse.Exception.NormalException;
+import com.pro.warehouse.exception.StoreException;
 import com.pro.warehouse.util.PoiUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,7 +15,7 @@ public class ExcelService<T> {
     public void ExportEcelService(List<T> excellist,String title,String sheetName,HttpServletResponse response,String filename,Class calzz) throws IllegalAccessException, InstantiationException {
         try {
             PoiUtils.exportExcel(excellist,title,sheetName,calzz,filename,response);
-        } catch (NormalException e) {
+        } catch (StoreException e) {
             e.printStackTrace();
         }
     }
@@ -25,7 +25,7 @@ public class ExcelService<T> {
         List<T> personList=null;
         try {
             personList = PoiUtils.importExcel(file,1,1,t.getClass());
-        } catch (NormalException e) {
+        } catch (StoreException e) {
             e.printStackTrace();
         }
         return personList;

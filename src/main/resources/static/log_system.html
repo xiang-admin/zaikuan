@@ -33,33 +33,6 @@
     <!-- ace settings handler -->
 
     <script src="assets/js/ace-extra.min.js"></script>
-    <style type="text/css">
-        table
-        {
-            border-collapse: collapse;
-            margin: 0 auto;
-            text-align: center;
-        }
-        table td, table th
-        {
-            border: 1px solid #cad9ea;
-            color: #666;
-            height: 30px;
-        }
-        table thead th
-        {
-            background-color: #CCE8EB;
-            width: 100px;
-        }
-        table tr:nth-child(odd)
-        {
-            background: #fff;
-        }
-        table tr:nth-child(even)
-        {
-            background: #F5FAFA;
-        }
-    </style>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 
@@ -67,6 +40,9 @@
     <script src="assets/js/html5shiv.js"></script>
     <script src="assets/js/respond.min.js"></script>
     <![endif]-->
+    <style type="text/css">
+
+    </style>
 </head>
 
 <body>
@@ -256,24 +232,24 @@
                 </li>
 
 
-                <!--<li>-->
-                    <!--<a href="#" class="dropdown-toggle">-->
-                        <!--<i class="icon-book"></i>-->
-                        <!--<span class="menu-text"> 库位管理 </span>-->
+                <li>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="icon-book"></i>
+                        <span class="menu-text"> 库位管理 </span>
 
-                        <!--<b class="arrow icon-angle-down"></b>-->
-                    <!--</a>-->
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
 
-                    <!--<ul class="submenu">-->
-                        <!--<li>-->
-                            <!--<a href="location_detail.html">-->
-                                <!--<i class="icon-double-angle-right"></i>-->
-                                <!--库位详情-->
-                            <!--</a>-->
-                        <!--</li>-->
+                    <ul class="submenu">
+                        <li>
+                            <a href="location_detail.html">
+                                <i class="icon-double-angle-right"></i>
+                                库位详情
+                            </a>
+                        </li>
 
-                    <!--</ul>-->
-                <!--</li>-->
+                    </ul>
+                </li>
 
 
                 <li>
@@ -379,7 +355,7 @@
                 <li>
                     <a href="#" class="dropdown-toggle">
                         <i class="icon-asterisk"></i>
-                        <span class="menu-text">标签制作管理 </span>
+                        <span class="menu-text"> 标签制作管理 </span>
 
                         <b class="arrow icon-angle-down"></b>
                     </a>
@@ -441,16 +417,15 @@
                 <ul class="breadcrumb">
                     <li>
                         <i class="icon-home home-icon"></i>
-                        <a href="#">报表信息>>>入库报表信息</a>
+                        <a href="#">日志管理>>>系统异常日志</a>
                     </li>
                 </ul>
                 <!-- .breadcrumb -->
             </div>
-            <form action="/report-makeEnterReport" id="storeDate">
-                <div style="float: left;font-size: 25px;">开始时间：</div>
-                <div style="float: left;"><input th:value="${startDate}" type="date" name="startDate" id="startDate"/></div>
-                <div style="float: left;font-size: 25px;">截止时间：</div>
-                <div style="float: left;"><input th:value="${endDate}" type="date" name="endDate" id="endDate"/></div>
+            <form action="/report-makeOnSendReport" id="storeDate">
+                <div style="float: left;font-size: 25px;">截止至：</div>
+                <div style="float: left;"><input th:value="${date}" type="date" name="endDate" id="endDate"/></div>
+
                 <div style="float: left;">
                     <button type="submit" class="btn btn-primary active" data-toggle="button" style="height: 35px;" onclick="submitForm()">生成报表</button>
                     <button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="toExcel()" >导出Excek</button>
@@ -459,27 +434,20 @@
             <script>
                 function submitForm(){
                     var form = document.getElementById('storeDate');
-                    var endDate = $("#endDate").val();
-                    var date = $("#startDate").val();
+                    var date = $("#endDate").val();
                     if(date==null||date=="") {
-                        alert("先选择开始日期");
-                    }else if(endDate==null||endDate=="") {
-                        alert("先选择结束日期");
-                    }
-                    else{
+                        alert("先选择日期");
+                    }else{
                         form.submit();
                     }
                 }
 
                 function toExcel(){
-                    var endDate = $("#endDate").val();
-                    var date = $("#startDate").val();
+                    var date = $("#endDate").val();
                     if(date==null||date=="") {
                         alert("先选择日期");
-                    }else if(endDate==null||endDate=="") {
-                        alert("先选择结束日期");
                     }else{
-                        var url="/report-enterReportExcel?startDate="+date+"&endDate="+endDate;
+                        var url="/report-onSendReportToExcel?date="+date;
                         window.location.href=url;
 
                     }
@@ -488,100 +456,222 @@
             <div style="height: 50px">
 
             </div>
+            <a></a>
             <div class="page-content">
                 <div class="row">
-                    <div class="col-xs-12">
+                    <div class="table-responsive">
                         <!-- PAGE CONTENT BEGINS -->
-                        <table>
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
                             <tr>
-                                <th colspan="13"
-                                    style="font-size: 30px;font-weight: bold;height: 50px;text-align: center;">
-                                    入库报表[<a th:text="${startDate}+'-'+${endDate}"></a>]
-                                </th>
-
+                                <th width="10%">日期</th>
+                                <th >异常信息</th>
                             </tr>
-                            <tr>
-                                <th>入库编号</th>
-                                <th>供应商名称</th>
-                                <th>品名</th>
-                                <th>料号</th>
-                                <th>规格</th>
-                                <th>生产日期</th>
-                                <th>数量</th>
-                                <th>单位</th>
-                                <th>件数</th>
-                                <th>净重</th>
-                                <th>毛重</th>
-                                <th>发票号</th>
-                                <th>实际入库日期</th>
-                            </tr>
-                            <tr th:each="report,reportStat : ${report}">
-                                <td th:text="${report.enterCode}">aaa</td>
-                                <td th:text="${report.goodsFrom}">aaa</td>
-                                <td th:text="${report.productName}">aaa</td>
-                                <td th:text="${report.materialCode}">aaa</td>
-                                <td th:text="${report.goodsSpec}">aaa</td>
-                                <td th:text="${report.produceDate}">aaa</td>
-                                <td th:text="${report.goodsNumber}">aaa</td>
-                                <td th:text="${report.goodsUnit}">aaa</td>
-                                <td th:text="${report.suitNumber}">aaa</td>
-                                <td th:text="${report.suttleWeight}">aaa</td>
-                                <td th:text="${report.roughWeight}">aaa</td>
-                                <td th:text="${report.billNumber}">aaa</td>
-                                <td th:text="${report.applyDate}">aaa</td>
-
+                            </thead>
+                            <tr th:each="operation : ${operations}">
+                                <td th:text="${operation.logDate}">aaa</td>
+                                <td th:text="${#strings.substring(operation.logMessage,0,200)}">aaa</td>
                             </tr>
 
                         </table>
-                    </div>
-                </div>
+
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
+        </div><!-- PAGE CONTENT ENDS -->
+        <!--分页插件-->
+        <div id="pg_grid-pager" class="ui-pager-control" role="group">
+            <table cellspacing="0" cellpadding="0" border="0" class="ui-pg-table"
+                   style="width:100%;table-layout:fixed;height:100%;" role="row">
+                <tbody>
+                <tr>
 
-    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
-        <i class="icon-double-angle-up icon-only bigger-110"></i>
-    </a>
+                    <td id="grid-pager_center" align="center" style="white-space: pre; width: 341px;">
+                        <table cellspacing="0" cellpadding="0" border="0" style="table-layout:auto;"
+                               class="ui-pg-table">
+                            <tbody>
+                            <tr>
+                                <td id="first_grid-pager" class="ui-pg-button ui-corner-all"
+                                    style="cursor: default;" onclick="toFirstPage()"><span
+                                        class="ui-icon icon-double-angle-left bigger-140"
+                                        onclick="toFirstPage()"></span></td>
+                                <td id="prev_grid-pager" class="ui-pg-button ui-corner-all"
+                                    style="cursor: default;" onclick="prepage()"><span
+                                        class="ui-icon icon-angle-left bigger-140"
+                                        onclick="propage()"></span></td>
+                                <td class="ui-pg-button ui-state-disabled"
+                                    style="width: 4px; cursor: default;"><span
+                                        class="ui-separator"></span></td>
+                                <td dir="ltr">Page <input class="ui-pg-input" type="text" size="2"
+                                                          maxlength="7" th:value="${page}"
+                                                          role="textbox"> of <span id="sp_1_grid-pager"
+                                                                                   th:text="${totalpage}"></span>
+                                </td>
+                                <td class="ui-pg-button ui-state-disabled" style="width:4px;"><span
+                                        class="ui-separator"></span></td>
+                                <td id="next_grid-pager" class="ui-pg-button ui-corner-all"
+                                    style="cursor: default;" onclick="nextpage()"><span
+                                        class="ui-icon icon-angle-right bigger-140"
+                                        onclick="nextpage()"></span></td>
+                                <td id="last_grid-pager" class="ui-pg-button ui-corner-all"
+                                    style="cursor: default;"><span
+                                        class="ui-icon icon-double-angle-right bigger-140"
+                                        onclick="toLastPage()"></span></td>
+                                <!--隐藏域，用来存储总页数-->
+                                <input id="totalpage" type="hidden" size="2" maxlength="7"
+                                       th:value="${totalpage}">
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <script>
+                        function nextpage() {
+                            var totalpage = Number($("#totalpage").val());
+                            var page = Number($(".ui-pg-input").val()) + 1;
+                            if (page <= totalpage) {
+                                window.location.href = "/log-system?pagenum=" + page;
+                                //alert("http://127.0.0.1:8880/applyin-getNotAllowApplyEnter?pagenum="+page);
+                            }
+                        }
+
+                        function prepage() {
+
+                            var page = Number($(".ui-pg-input").val()) - 1;
+                            if (page > 0) {
+                                window.location.href = "/log-system?pagenum=" + page;
+                            }
+                        }
+
+                        function toLastPage() {
+                            var page = Number($("#totalpage").val());
+                            window.location.href = "/log-system?pagenum=" + page;
+                        }
+
+                        function toFirstPage() {
+                            var page = 1;
+                            window.location.href = "/log-system?pagenum=" + page;
+                        }
+                    </script>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div><!-- /.col -->
+</div><!-- /.row -->
+</div><!-- /.page-content -->
+</div><!-- /.main-content -->
+
+
+<div class="ace-settings-container" id="ace-settings-container">
+    <div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
+        <i class="icon-cog bigger-150"></i>
+    </div>
+
+    <div class="ace-settings-box" id="ace-settings-box">
+        <div>
+            <div class="pull-left">
+                <select id="skin-colorpicker" class="hide">
+                    <option data-skin="default" value="#438EB9">#438EB9</option>
+                    <option data-skin="skin-1" value="#222A2D">#222A2D</option>
+                    <option data-skin="skin-2" value="#C6487E">#C6487E</option>
+                    <option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+                </select>
+            </div>
+            <span>&nbsp; 选择皮肤</span>
+        </div>
+
+        <div>
+            <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl"/>
+            <label class="lbl" for="ace-settings-rtl"> 左右（右左）交换</label>
+        </div>
+    </div>
+
+</div><!-- /#ace-settings-container -->
+</div><!-- /.main-container-inner -->
+<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+    <i class="icon-double-angle-up icon-only bigger-110"></i>
+</a>
 </div><!-- /.main-container -->
 
 <!-- basic scripts -->
 
 <!--[if !IE]> -->
 
-<script src="assets\js\jquery-2.0.3.min.js"></script>
+<script src="assets/js/jquery.min.js"></script>
 
 <!-- <![endif]-->
 
 <!--[if IE]>
-<script src="assets\js\jquery-1.10.2.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <![endif]-->
 
 <!--[if !IE]> -->
 
 <script type="text/javascript">
-    window.jQuery || document.write("<script src='assets/js/jquery-2.0.3.min.js'>" + "<" + "script>");
+    window.jQuery || document.write("<script src='assets/js/jquery-2.0.3.min.js'>" + "<" + "/script>");
 </script>
 
 <!-- <![endif]-->
 
 <!--[if IE]>
 <script type="text/javascript">
-    window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>" + "<" + "script>");
+    window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>" + "<" + "/script>");
 </script>
 <![endif]-->
 
 <script type="text/javascript">
-    if ("ontouchend" in document) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "script>");
+    if ("ontouchend" in document) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
 </script>
 <script src="assets/js/bootstrap.min.js"></script>
 <script src="assets/js/typeahead-bs2.min.js"></script>
 
+<!-- page specific plugin scripts -->
+<script src="assets/js/jquery.dataTables.min.js"></script>
+<script src="assets/js/jquery.dataTables.bootstrap.js"></script>
 <!-- ace scripts -->
 
 <script src="assets/js/ace-elements.min.js"></script>
 <script src="assets/js/ace.min.js"></script>
 
 <!-- inline scripts related to this page -->
+<script type="text/javascript">
+    jQuery(function ($) {
+        var oTable1 = $('#sample-table-2').dataTable({
+            "aoColumns": [
+                {"bSortable": false},
+                null, null, null, null, null,
+                {"bSortable": false}
+            ]
+        });
 
+
+        $('table th input:checkbox').on('click', function () {
+            var that = this;
+            $(this).closest('table').find('tr > td:first-child input:checkbox')
+                .each(function () {
+                    this.checked = that.checked;
+                    $(this).closest('tr').toggleClass('selected');
+                });
+
+        });
+
+
+        $('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+
+        function tooltip_placement(context, source) {
+            var $source = $(source);
+            var $parent = $source.closest('table')
+            var off1 = $parent.offset();
+            var w1 = $parent.width();
+
+            var off2 = $source.offset();
+            var w2 = $source.width();
+
+            if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2)) return 'right';
+            return 'left';
+        }
+    })
+</script>
 </body>
 </html>

@@ -10,6 +10,7 @@ import com.pro.warehouse.constant.ResultCode;
 import com.pro.warehouse.dao.ApplyEnterRepository;
 import com.pro.warehouse.dao.CommonRepository;
 import com.pro.warehouse.dao.EntrepotStatusRepository;
+import com.pro.warehouse.exception.StoreException;
 import com.pro.warehouse.pojo.ApplyEnter;
 import com.pro.warehouse.pojo.EntrepotStatus;
 import com.pro.warehouse.pojo.User;
@@ -123,8 +124,8 @@ public class ApplyEnterController {
         String page = "entrance_apply";
         User user = (User) request.getSession().getAttribute("user");
         System.err.println("当前操作人：" + user);
-        if (user == null) {
-            throw new Exception("尚未登录！");
+        if(user==null){
+            throw new StoreException("用户尚未登录");
         }
         Long id = user.getId();
 
@@ -158,8 +159,11 @@ public class ApplyEnterController {
      * 新增入库申请  跳转待审核页面
      */
     @RequestMapping(value = "/applyin-addapply")
-    public String saveApply(ApplyEnter applyEnter, BindingResult bindingResult, HttpServletRequest request) {
+    public String saveApply(ApplyEnter applyEnter, BindingResult bindingResult, HttpServletRequest request) throws StoreException {
         User user = (User) request.getSession().getAttribute("user");
+        if(user==null){
+            throw new StoreException("用户尚未登录");
+        }
         System.err.println("当前操作用户:" + user);
         //保存
         applyEnter.setApplyPersonId(user.getUsername());
@@ -176,12 +180,15 @@ public class ApplyEnterController {
      * 审核入库申请(将状态改为“已确认”，并增加确认人的id，前台显示以名称显示)
      */
     @RequestMapping("/applyin-updateStatus")
-    public String ensureApply(int enterId, HttpServletRequest request) {
+    public String ensureApply(int enterId, HttpServletRequest request) throws StoreException {
         String page = "entrance_apply_wait";
         logger.debug("查找ID为" + enterId + "的入库单");
         ApplyEnter apply = applyEnterRepository.findApplyEnterByenterId(enterId);
         apply.setStatus(ApplyStatus.ENSURE);
         User user = (User) request.getSession().getAttribute("user");
+        if(user==null){
+            throw new StoreException("用户尚未登录");
+        }
         apply.setEnsurePersonId(user.getUsername());
         //更新
         applyEnterRepository.save(apply);
@@ -213,11 +220,14 @@ public class ApplyEnterController {
      * @return
      */
     @RequestMapping(value = "applyin-turndown")
-    public String turnDownTheApply(int enterId, HttpServletRequest request) {
+    public String turnDownTheApply(int enterId, HttpServletRequest request) throws StoreException {
         String page = "entrance_apply_wait";
         ApplyEnter apply = applyEnterRepository.findApplyEnterByenterId(enterId);
         apply.setStatus(ApplyStatus.REFUSED);
         User user = (User) request.getSession().getAttribute("user");
+        if(user==null){
+            throw new StoreException("用户尚未登录");
+        }
         apply.setEnsurePersonId(user.getUsername());
         //更新
         applyEnterRepository.save(apply);
@@ -229,9 +239,12 @@ public class ApplyEnterController {
      * 根据ID删除
      */
     @RequestMapping("/applyin-deleteById")
-    public String deleteApplyById(int enterId, HttpServletRequest request) {
+    public String deleteApplyById(int enterId, HttpServletRequest request) throws StoreException {
         //System.err.println("删除ID"+enterId);
         User user = (User) request.getSession().getAttribute("user");
+        if(user==null){
+            throw new StoreException("用户尚未登录");
+        }
         ApplyEnter applyEnter = applyEnterRepository.findApplyEnterByenterId(enterId);
 
         applyEnterRepository.delete(applyEnter);
@@ -243,9 +256,12 @@ public class ApplyEnterController {
      * 根据ID删除
      */
     @RequestMapping("/applyin-his-deleteById")
-    public String deleteHisApplyById(int enterId, HttpServletRequest request) {
+    public String deleteHisApplyById(int enterId, HttpServletRequest request) throws StoreException {
         //System.err.println("删除ID"+enterId);
         User user = (User) request.getSession().getAttribute("user");
+        if(user==null){
+            throw new StoreException("用户尚未登录");
+        }
         ApplyEnter applyEnter = applyEnterRepository.findApplyEnterByenterId(enterId);
 
         applyEnterRepository.delete(applyEnter);
@@ -333,9 +349,12 @@ public class ApplyEnterController {
      * 批量申请
      */
     @RequestMapping(value = "/applyin-batchApply")
-    public String batchApply(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws InstantiationException, IllegalAccessException {
+    public String batchApply(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws InstantiationException, IllegalAccessException, StoreException {
         List<ApplyEnter> applyEnters = excelService.ImportExcelService(file, new ApplyEnter());
         User user1 = (User) request.getSession().getAttribute("user");
+        if(user1==null){
+            throw new StoreException("用户尚未登录");
+        }
         logger.debug(new Date()+"批量导入入库申请："+new Gson().toJson(applyEnters));
         String success = "";
         for(ApplyEnter applyEnter:applyEnters){
