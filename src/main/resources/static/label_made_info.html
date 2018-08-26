@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
     <title>物流仓库管理系统主页</title>
@@ -63,6 +63,34 @@
             <ul class="nav ace-nav">
 
                 <li class="light-blue">
+                    <a th:text="'欢迎您：'+${session.user.username}" data-toggle="dropdown" href="#" class="dropdown-toggle">
+
+                    </a>
+
+                    <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                        <li>
+                            <a href="/user-updatePwd">
+                                <i class="icon-user"></i>
+                                修改密码
+                            </a>
+                        </li>
+
+                        <li class="divider"></li>
+
+                        <li>
+                            <a href="/user-logout">
+                                <i class="icon-off"></i>
+                                退出
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul><!-- /.ace-nav -->
+        </div><!-- /.navbar-header --><div class="navbar-header pull-right" role="navigation">
+
+            <ul class="nav ace-nav">
+
+                <li class="light-blue">
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                         <img class="nav-user-photo" src="assets/avatars/user.jpg" alt="Jason's Photo" />
 								<span class="user-info">
@@ -84,7 +112,7 @@
                         <li>
                             <a href="#">
                                 <i class="icon-user"></i>
-                                个人资料
+                                修改密码
                             </a>
                         </li>
 

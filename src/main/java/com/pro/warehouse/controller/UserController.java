@@ -1,8 +1,10 @@
 package com.pro.warehouse.controller;
 
 import com.pro.warehouse.Service.IndexService;
+import com.pro.warehouse.Service.LogService;
 import com.pro.warehouse.dao.*;
 import com.pro.warehouse.mail.MailService;
+import com.pro.warehouse.myexception.StoreException;
 import com.pro.warehouse.pojo.User;
 import com.pro.warehouse.util.EncrypeUtil;
 import com.pro.warehouse.util.PageUtil;
@@ -29,6 +31,8 @@ public class UserController {
     private IndexService indexService;
     @Autowired
     MailService mailService;
+    @Autowired
+    private LogService logService;
 
 
     private Integer pagesize = 3;//每页显示的条数
@@ -46,8 +50,9 @@ public class UserController {
     @RequestMapping(value = "/user-dologin", method = {RequestMethod.GET, RequestMethod.POST})
     public String UserLogin(User user, ModelMap modelMap, HttpServletRequest request) throws Exception {
         String page = "index";
-
+        int size = 0;
         List<User> userList = userRepository.findUserByusername(user.getUsername());
+
         if (userList.size() == 0)//此用户不存在
         {
             modelMap.addAttribute("message", "用户名或者密码不正确");
@@ -68,6 +73,7 @@ public class UserController {
         modelMap.addAttribute("outSize",outSize);
         modelMap.addAttribute("entrepotSize",entrepotSize);
         System.out.println("登陆用户：" + userList.get(0));
+        logService.saveOpLog(user.getUsername(),"登录","成功",user.toString());
         return page;
     }
 
@@ -75,6 +81,12 @@ public class UserController {
     public String thymeleaftest(ModelMap map) {
         // map.addAttribute("host", "http://www.baidu.com");
         return "login";
+    }
+
+    @RequestMapping("/user-updatePwd")
+    public String uPwdView(ModelMap map) {
+        // map.addAttribute("host", "http://www.baidu.com");
+        return "user_change_pwd";
     }
 
     @RequestMapping("/mail")
@@ -86,7 +98,11 @@ public class UserController {
 
 
     @RequestMapping("/user-save")
-    public String saveUser(User user) {
+    public String saveUser(User user) throws StoreException {
+        List<User> userList = userRepository.findUserByusername(user.getUsername());
+        if(userList.size()>0){
+            throw new StoreException("该用户已存在，请重新选择不存在的用户名！");
+        }
         try {
             user.setPassword(EncrypeUtil.shaEncode(user.getPassword()));
             user.setStatus(1);
@@ -190,5 +206,45 @@ public class UserController {
         return "redirect:/user-getAll?pagenum=1";
     }
 
+    @RequestMapping("/user-dopwd")
+    public String upPwd(String oldPassword,String newPassword,String rePassword, ModelMap modelMap,HttpSession session) throws Exception {
+        logger.debug("修改密码"+oldPassword+"   "+rePassword+"  "+rePassword);
+        int i=0;
+        if(!newPassword.equals(rePassword)){
+            System.err.println("修改密码"+oldPassword+"   "+rePassword+"  "+rePassword);
+            throw new StoreException("新密码与确认密码不同，请重新输入");
+        }
+        User user = (User)session.getAttribute("user");
+        if(user==null) {
+            throw new StoreException("用户会话过期，请重新登录");
+        }
+        List<User> userList = userRepository.findUserByusername(user.getUsername());
+        if(userList.size()==0){
+            throw new StoreException("该账户不存在！");
+        }
+        System.err.println("查找到的用户"+userList);
+        for(User user1:userList){
+            if(user1.getPassword().equals(EncrypeUtil.shaEncode(oldPassword))){
+                i++;
+                break;
+            }
+        }
+        if(i==0){
+            throw new StoreException("密码错误！");
+        }
+        user.setPassword(EncrypeUtil.shaEncode(newPassword));
+        userRepository.save(user);
+        session.removeAttribute("user");
+        return "login";
+    }
+
+    @RequestMapping("/user-logout")
+    public String logOut(HttpSession session) {
+        User user = (User)session.getAttribute("user");
+        if(user!=null) {
+            session.removeAttribute("user");
+        }
+        return "login";
+    }
 
 }
