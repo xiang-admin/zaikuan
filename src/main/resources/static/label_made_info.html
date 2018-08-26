@@ -278,7 +278,7 @@
                     </a>
 
                     <ul class="submenu">
-                        <li th:if="${session.user.role}==1 or ${session.user.role}==2">
+                        <li th:if="${session.user.role}==1 or ${session.user.role}==2 or ${session.user.role}==4">
                             <a href="/entrepot-list?pagenum=1">
                                 <i class="icon-double-angle-right"></i>
                                 库存材料列表
@@ -386,7 +386,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li th:if="${session.user.role}==1">
                     <a href="#" class="dropdown-toggle">
                         <i class="icon-asterisk"></i>
                         <span class="menu-text">日志管理 </span>

@@ -6,6 +6,7 @@ import com.pro.warehouse.dao.*;
 import com.pro.warehouse.mail.MailService;
 import com.pro.warehouse.myexception.StoreException;
 import com.pro.warehouse.pojo.User;
+import com.pro.warehouse.sheduler.ReportShedule;
 import com.pro.warehouse.util.EncrypeUtil;
 import com.pro.warehouse.util.PageUtil;
 import org.slf4j.Logger;
@@ -33,9 +34,11 @@ public class UserController {
     MailService mailService;
     @Autowired
     private LogService logService;
+    @Autowired
+    ReportShedule reportShedule;
 
 
-    private Integer pagesize = 3;//每页显示的条数
+    private Integer pagesize = 15;//每页显示的条数
 
 
     // 通过@Resource注解引入JdbcTemplate对象
@@ -89,12 +92,6 @@ public class UserController {
         return "user_change_pwd";
     }
 
-    @RequestMapping("/mail")
-    public void mail(ModelMap map) {
-        // map.addAttribute("host", "http://www.baidu.com");
-        mailService.sendAttachmentsMail("1249505842@qq.com","test","test");
-
-    }
 
 
     @RequestMapping("/user-save")
@@ -245,6 +242,11 @@ public class UserController {
             session.removeAttribute("user");
         }
         return "login";
+    }
+
+    @RequestMapping("/mail")
+    public void sendMail(){
+        reportShedule.sendMail();
     }
 
 }

@@ -243,7 +243,7 @@
 							</a>
 
 							<ul class="submenu">
-								<li th:if="${session.user.role}==1 or ${session.user.role}==2">
+								<li th:if="${session.user.role}==1 or ${session.user.role}==2 or ${session.user.role}==4">
 									<a href="/entrepot-list?pagenum=1">
 										<i class="icon-double-angle-right"></i>
 										库存材料列表
@@ -351,7 +351,7 @@
 								</li>
 							</ul>
 						</li>
-						<li>
+						<li th:if="${session.user.role}==1">
 							<a href="#" class="dropdown-toggle">
 								<i class="icon-asterisk"></i>
 								<span class="menu-text">日志管理 </span>
@@ -625,6 +625,7 @@
 																<option data-icon="&spades;" value="2">客服</option>
 																<option data-icon="&clubs;" value="3">仓库人员</option>
 																<option data-icon="&hearts;" value="1">超级管理员</option>
+																<option data-icon="&hearts;" value="4">库存管理员</option>
 															</select>
 														</th>
 													</tr>
@@ -687,9 +688,10 @@
                                                         <td>角色</td>
                                                         <th>
                                                             <select name="role" id="role2" class="city pickout" placeholder="选择账户类型">
-                                                                <option data-icon="&spades;" value="2">客服</option>
-                                                                <option data-icon="&clubs;" value="3">仓库人员</option>
+                                                                <option data-icon="&spades;" value="3">客服</option>
+                                                                <option data-icon="&clubs;" value="2">仓库人员</option>
                                                                 <option data-icon="&hearts;" value="1">超级管理员</option>
+                                                                <option data-icon="&hearts;" value="4">库存管理员</option>
                                                             </select>
                                                         </th>
                                                     </tr>

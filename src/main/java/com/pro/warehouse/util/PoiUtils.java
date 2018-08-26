@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.*;
@@ -33,10 +34,27 @@ public class PoiUtils {
         defaultExport(list, fileName, response);
     }
 
+    public static void exportExcel(List<?> list, String title, String sheetName, Class<?> pojoClass, String fileName) throws StoreException {
+        defaultExport(list, pojoClass, fileName, new ExportParams(title, sheetName));
+    }
+
     private static void defaultExport(List<?> list, Class<?> pojoClass, String fileName, HttpServletResponse response, ExportParams exportParams) throws StoreException {
         Workbook workbook = ExcelExportUtil.exportExcel(exportParams, pojoClass, list);
         if (workbook != null) ;
         downLoadExcel(fileName, response, workbook);
+    }
+
+    private static void defaultExport(List<?> list, Class<?> pojoClass, String filePath, ExportParams exportParams) throws StoreException {
+        Workbook workbook = ExcelExportUtil.exportExcel(exportParams, pojoClass, list);
+        if (workbook != null){} ;
+        FileOutputStream file = null;
+        try {
+            file = new FileOutputStream(filePath);
+            workbook.write(file);
+            file.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static void downLoadExcel(String fileName, HttpServletResponse response, Workbook workbook) throws StoreException {
@@ -95,10 +113,10 @@ public class PoiUtils {
     }
 
     public static void main(String args[]) throws StoreException {
-        List<StockHUB> stockHUBS=new ArrayList<>();
-        StockHUB stockHUB1=new StockHUB("1","1","1","1","1","1","1");
+        List<StockHUB> stockHUBS = new ArrayList<>();
+        StockHUB stockHUB1 = new StockHUB("1", "1", "1", "1", "1", "1", "1");
 
-        StockHUB stockHUB2=new StockHUB("2","2","2","2","2","2","2");
+        StockHUB stockHUB2 = new StockHUB("2", "2", "2", "2", "2", "2", "2");
         stockHUBS.add(stockHUB1);
         stockHUBS.add(stockHUB2);
 

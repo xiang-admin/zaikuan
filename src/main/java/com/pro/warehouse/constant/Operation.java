@@ -15,7 +15,8 @@ public enum Operation {
     DELETE_STORE("删除库存"),
     CHECK_STORE("检验库存产品"),
     AUTO_COMPUTE_NUMBER("系统统计数量"),
-    REFUSE_OUT("拒绝出库");
+    REFUSE_OUT("拒绝出库"),
+    SEND_EMAIL_REPORT("发送报表");
 
     private String operation;
     Operation(String op){
