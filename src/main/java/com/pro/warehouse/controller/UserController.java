@@ -77,6 +77,13 @@ public class UserController {
         return "login";
     }
 
+    @RequestMapping("/mail")
+    public void mail(ModelMap map) {
+        // map.addAttribute("host", "http://www.baidu.com");
+        mailService.sendAttachmentsMail("1249505842@qq.com","test","test");
+
+    }
+
 
     @RequestMapping("/user-save")
     public String saveUser(User user) {

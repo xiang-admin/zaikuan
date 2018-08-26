@@ -43,7 +43,6 @@ public class MailService {
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(content, true);
-
             mailSender.send(message);
             logger.info("带附件的邮件已经发送。");
         } catch (MessagingException e) {

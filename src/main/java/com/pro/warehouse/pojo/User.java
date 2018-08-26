@@ -10,7 +10,7 @@ public class User {
 	@Id
 	//设置主键并且设置主键为自增
 	@GeneratedValue(strategy= GenerationType.AUTO)
-	private Long id;//1,管理员。2，仓库。3，客服
+	private Long id;
 
 
 	@Column(nullable = false)
@@ -20,7 +20,7 @@ public class User {
 	private String password;
 
 	@Column(nullable = false)
-	private Integer role;
+	private Integer role;//1,管理员。2，仓库。3，客服
 
 	private Integer status;//1.禁用  2.启用
 
