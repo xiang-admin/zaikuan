@@ -29,4 +29,8 @@ public interface ApplyOutPutRepository extends JpaRepository<ApplyOutPut, Long> 
      */
     @Query("SELECT out FROM ApplyOutPut out WHERE TO_DAYS(NOW()) - TO_DAYS(out.applyDate) = 1 AND STATUS='已确认'")
     List<ApplyOutPut> getYestdayApplys();
+
+
+    @Query("SELECT out FROM ApplyOutPut out WHERE TO_DAYS(NOW()) - TO_DAYS(out.applyDate) = 0 AND STATUS='已确认'")
+    List<ApplyOutPut> getTodayEnsure();
 }

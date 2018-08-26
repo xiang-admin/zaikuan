@@ -27,4 +27,13 @@ spring:
     view:
       prefix: classpath:/   # 定位模板的目录
       suffix: .html     # 给返回的页面添加后缀名
+  mail:
+    host: smtp.163.com
+    username: xda265856@163.com
+    password: xda265856
+    properties:
+                mail:
+                    smtp:
+                        auth: true
+                        timeout: 25000
 

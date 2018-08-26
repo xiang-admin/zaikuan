@@ -2,18 +2,19 @@ package com.pro.warehouse.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
+import com.pro.warehouse.Service.ApplyEnterService;
 import com.pro.warehouse.Service.ExcelService;
 import com.pro.warehouse.Service.LogService;
 import com.pro.warehouse.constant.ApplyStatus;
 import com.pro.warehouse.constant.Operation;
-import com.pro.warehouse.constant.ResultCode;
 import com.pro.warehouse.dao.ApplyEnterRepository;
 import com.pro.warehouse.dao.CommonRepository;
 import com.pro.warehouse.dao.EntrepotStatusRepository;
-import com.pro.warehouse.exception.StoreException;
+import com.pro.warehouse.myexception.StoreException;
 import com.pro.warehouse.pojo.ApplyEnter;
 import com.pro.warehouse.pojo.EntrepotStatus;
 import com.pro.warehouse.pojo.User;
+import com.pro.warehouse.sheduler.DaliyComputeShedule;
 import com.pro.warehouse.util.PageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,18 +38,11 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.ResourceUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.URLEncoder;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -61,6 +54,11 @@ public class ApplyEnterController {
     Logger logger = LoggerFactory.getLogger(ApplyEnterController.class.getName());
     @Autowired
     private EntrepotStatusRepository entrepotStatusRepository;
+
+    @Autowired
+    private DaliyComputeShedule daliyComputeShedule;
+    @Autowired
+    private ApplyEnterService applyEnterService;
 
     @Autowired
     private ExcelService<ApplyEnter> excelService;
@@ -78,7 +76,9 @@ public class ApplyEnterController {
     private LogService logService;
 
 
+
     private Integer pagesize = 20;//每页显示的条数
+
 
 
     /**
@@ -190,6 +190,7 @@ public class ApplyEnterController {
             throw new StoreException("用户尚未登录");
         }
         apply.setEnsurePersonId(user.getUsername());
+        apply.setApplyDate(new Date());
         //更新
         applyEnterRepository.save(apply);
         //添加到仓库中
@@ -208,6 +209,7 @@ public class ApplyEnterController {
         entrepotStatus.setTotalSize(apply.getNumber());
         entrepotStatus.setTaxCode(apply.getBillNumber());//发票号码
         entrepotStatus.setPosition(apply.getPosition());
+        entrepotStatus.setUpdateDate(new Date());
         entrepotStatusRepository.save(entrepotStatus);
         logService.saveOpLog(user.getUsername(), Operation.ENSURE_ENTER.getOperation(),"成功", JSON.toJSONString(apply));
         return "redirect:/applyin-toBeEnsured?pagenum=1";
@@ -408,6 +410,14 @@ public class ApplyEnterController {
                 e.printStackTrace();
             }
         }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/applyin-todayCount")
+    public int getTodayApplyEnters(){
+        System.out.println("总数"+applyEnterService.getNumberOfTodayApplyEnter());
+        daliyComputeShedule.computeCount();
+        return  applyEnterService.getNumberOfTodayApplyEnter();
     }
 
 }

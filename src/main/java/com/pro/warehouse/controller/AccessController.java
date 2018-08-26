@@ -1,9 +1,10 @@
 package com.pro.warehouse.controller;
 
 import com.pro.warehouse.Service.LogService;
-import com.pro.warehouse.exception.StoreException;
+import com.pro.warehouse.myexception.StoreException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,6 +22,7 @@ import java.util.TreeMap;
  */
 @ControllerAdvice
 public class AccessController {
+    Logger logger = LoggerFactory.getLogger(AccessController.class.getName());
     @Autowired
     LogService logService;
 
@@ -36,6 +38,7 @@ public class AccessController {
         Map model = new TreeMap();
         model.put("status",false);
         model.put("message",localizedMessage);
+        runtimeException.printStackTrace();
         return model;
     }
 
@@ -52,6 +55,7 @@ public class AccessController {
         model.put("status",false);
         model.put("message",storeException.getMessage());
         model.put("timestamp",new Timestamp(System.currentTimeMillis()));
+        storeException.printStackTrace();
         return model;
     }
 

@@ -34,4 +34,16 @@ public class EntrepotStatusService {
         }
         return results;
     }
+
+    /**
+     * 获取全部库存数量
+     */
+    public int getAllEntrepotCount(){
+        List<EntrepotStatus> all = entrepotStatusRepository.findAll();
+        int total =0;
+        for(EntrepotStatus entrepotStatus:all){
+            total = total+entrepotStatus.getTotalSize();
+        }
+        return total;
+    }
 }

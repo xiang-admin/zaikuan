@@ -2,6 +2,7 @@ package com.pro.warehouse.controller;
 
 import com.pro.warehouse.Service.IndexService;
 import com.pro.warehouse.dao.*;
+import com.pro.warehouse.mail.MailService;
 import com.pro.warehouse.pojo.User;
 import com.pro.warehouse.util.EncrypeUtil;
 import com.pro.warehouse.util.PageUtil;
@@ -26,6 +27,8 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private IndexService indexService;
+    @Autowired
+    MailService mailService;
 
 
     private Integer pagesize = 3;//每页显示的条数
@@ -36,6 +39,9 @@ public class UserController {
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private CommonRepository<User> commonRepository;
+
+
+
 
     @RequestMapping(value = "/user-dologin", method = {RequestMethod.GET, RequestMethod.POST})
     public String UserLogin(User user, ModelMap modelMap, HttpServletRequest request) throws Exception {

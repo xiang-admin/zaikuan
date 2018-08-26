@@ -14,6 +14,7 @@ public enum Operation {
     DELETE_APPLY_OUT_HIS("删除出库历史纪录"),
     DELETE_STORE("删除库存"),
     CHECK_STORE("检验库存产品"),
+    AUTO_COMPUTE_NUMBER("系统统计数量"),
     REFUSE_OUT("拒绝出库");
 
     private String operation;

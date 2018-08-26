@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -35,4 +36,7 @@ public interface ApplyEnterRepository extends JpaRepository<ApplyEnter, Long> {
      */
     @Query("SELECT number FROM ApplyEnter enter WHERE TO_DAYS(NOW()) - TO_DAYS(enter.applyDate) = 1 AND STATUS='已确认'")
     List<ApplyEnter> getYestdayApplys();
+
+    @Query("SELECT enter FROM ApplyEnter enter WHERE TO_DAYS(NOW()) - TO_DAYS(enter.applyDate) = 0 AND STATUS='已确认'")
+    List<ApplyEnter> getTodayEnsure();
 }

@@ -7,12 +7,10 @@ import com.pro.warehouse.Service.ExcelService;
 import com.pro.warehouse.Service.LogService;
 import com.pro.warehouse.constant.ApplyStatus;
 import com.pro.warehouse.constant.Operation;
-import com.pro.warehouse.dao.ApplyEnterRepository;
 import com.pro.warehouse.dao.ApplyOutPutRepository;
 import com.pro.warehouse.dao.CommonRepository;
 import com.pro.warehouse.dao.EntrepotStatusRepository;
-import com.pro.warehouse.exception.StoreException;
-import com.pro.warehouse.pojo.ApplyEnter;
+import com.pro.warehouse.myexception.StoreException;
 import com.pro.warehouse.pojo.ApplyOutPut;
 import com.pro.warehouse.pojo.EntrepotStatus;
 import com.pro.warehouse.pojo.User;
@@ -29,7 +27,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.ResourceUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -244,6 +241,7 @@ public class ApplyOutController {
                 //修改数量
                 entrepotStatusRepository.save(badGodds);
                 //修改出库申请状态
+                output.setApplyDate(new Date());
                 output.setStatus(ApplyStatus.TURN_BACK);
                 request.getSession().setAttribute("message","退回申请成功:退回-"+output.getSize()+",还剩不良品-"+badGodds.getTotalSize());
                 result = "成功";

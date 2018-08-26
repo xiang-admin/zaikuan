@@ -27,7 +27,10 @@ public class LogService {
         logOperation.setUsername(username);
         logOperation.setResult(result);
         logOperation.setOperation(operation);
-        logOperation.setDetail(detail.substring(0,1023));
+        if(detail.length()>1023) {
+            detail = detail.substring(0, 1023);
+        }
+        logOperation.setDetail(detail);
         logOperation.setDate(new Date());
         logOperationRepository.save(logOperation);
     }
