@@ -6,7 +6,7 @@ import com.pro.warehouse.dao.*;
 import com.pro.warehouse.mail.MailService;
 import com.pro.warehouse.myexception.StoreException;
 import com.pro.warehouse.pojo.User;
-import com.pro.warehouse.sheduler.ReportShedule;
+import com.pro.warehouse.sheduler.DaliyComputeShedule;
 import com.pro.warehouse.util.EncrypeUtil;
 import com.pro.warehouse.util.PageUtil;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ public class UserController {
     @Autowired
     private LogService logService;
     @Autowired
-    ReportShedule reportShedule;
+    DaliyComputeShedule reportShedule;
 
 
     private Integer pagesize = 15;//每页显示的条数
@@ -68,6 +68,7 @@ public class UserController {
                 User loginUser = userList.get(0);
                 request.getSession().setAttribute("user", loginUser);
             }
+            System.out.println("登陆用户：" + userList.get(0));
         }
         int enterSize = indexService.getYestdayApplyEnterCount();
         int outSize = indexService.getYestdayApplyOutCount();
@@ -75,7 +76,6 @@ public class UserController {
         modelMap.addAttribute("enterSize",enterSize);
         modelMap.addAttribute("outSize",outSize);
         modelMap.addAttribute("entrepotSize",entrepotSize);
-        System.out.println("登陆用户：" + userList.get(0));
         logService.saveOpLog(user.getUsername(),"登录","成功",user.toString());
         return page;
     }

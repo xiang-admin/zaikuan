@@ -80,6 +80,9 @@ dependencies {
 	compile (group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.5.9.RELEASE'){
 		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
 	}
+    // https://mvnrepository.com/artifact/org.springframework/spring-tx
+    compile group: 'org.springframework', name: 'spring-tx', version: '4.3.18.RELEASE'
+
 
 
 
