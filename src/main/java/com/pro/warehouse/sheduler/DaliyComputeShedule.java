@@ -105,7 +105,7 @@ public class DaliyComputeShedule {
             excelService.ExportEcel(stockHUBS,"库存报表["+format+"]","库存报表",filePath,StockHUB.class);
             String subject = format+"的库存报表";
             String content = "系统自动发送库存报表，"+" 报表生成日期："+format+",邮件为系统发送，请勿回复！";
-            //mailService.sendAttachmentsMail(MailReceiver.receiver, "库存报表", content,filePath);
+            mailService.sendAttachmentsMail(MailReceiver.receiver, "库存报表", content,filePath);
             mailService.sendAttachmentsMail("1249505842@qq.com", "库存报表", content,filePath);
             logService.saveOpLog("系统",Operation.SEND_EMAIL_REPORT.getOperation(),"成功",content+"，存储位置："+filePath);
         } catch (Exception e) {

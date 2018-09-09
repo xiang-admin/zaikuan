@@ -21,7 +21,7 @@ public class MyScheduler {
 
     public void startScheduler1(Scheduler scheduler) throws SchedulerException {
         JobDetail jobDetail = JobBuilder.newJob(MySchedulerJob.class).withIdentity("job1", "jobGroup1").build();
-        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule("0 50 13 * * ?");
+        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule("0 50 23 * * ?");
         CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity("trigger1", "triggerGroup1")
                 .withSchedule(cronScheduleBuilder).build();
         scheduler.scheduleJob(jobDetail, trigger);
@@ -29,7 +29,7 @@ public class MyScheduler {
 
     public void startScheduler2(Scheduler scheduler) throws SchedulerException {
         JobDetail jobDetail = JobBuilder.newJob(MySchedulerJob2.class).withIdentity("job2", "jobGroup2").build();
-        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule("0 10 14 * * ?");
+        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule("0 20 22 * * ?");
         CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity("trigger2", "triggerGroup2")
                 .withSchedule(cronScheduleBuilder).build();
         scheduler.scheduleJob(jobDetail, trigger);

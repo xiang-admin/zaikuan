@@ -83,3 +83,23 @@
     - 入库审核
     - 出库审核
     - 库存
+# 20180909 BUGFIX
+  - 困扰已久的阿里云发送邮件问题解决了，是由于阿里云默认封禁了25端口导致的，解决如下
+  ```
+   #邮箱配置
+    mail:
+      host: smtp.exmail.qq.com
+      username: 邮箱名
+      password: 邮箱登录密码
+      properties:
+        mail:
+          smtp:
+            auth: true
+            timeout: 25000
+            ssl.enable: true
+            socketFactory.class: javax.net.ssl.SSLSocketFactory
+            starttls.enable: true
+            socketFactory.port: 465　
+            port: 465
+      default-encoding: UTF-8
+  ```
