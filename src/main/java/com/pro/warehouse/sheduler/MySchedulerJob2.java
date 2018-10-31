@@ -23,7 +23,7 @@ public class MySchedulerJob2 implements Job {
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         daliyComputeShedule.sendMail();
-        System.out.println("BBBB: The time is now " + dateFormat().format(new Date()));
+        System.out.println("邮件已发送" + dateFormat().format(new Date()));
     }
 
 }

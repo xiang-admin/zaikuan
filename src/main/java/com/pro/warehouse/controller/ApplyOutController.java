@@ -11,6 +11,7 @@ import com.pro.warehouse.dao.ApplyOutPutRepository;
 import com.pro.warehouse.dao.CommonRepository;
 import com.pro.warehouse.dao.EntrepotStatusRepository;
 import com.pro.warehouse.myexception.StoreException;
+import com.pro.warehouse.pojo.ApplyEnter;
 import com.pro.warehouse.pojo.ApplyOutPut;
 import com.pro.warehouse.pojo.EntrepotStatus;
 import com.pro.warehouse.pojo.User;
@@ -436,5 +437,42 @@ public class ApplyOutController {
             }
         }
 
+    }
+
+    /**
+     * 搜索
+     */
+    @RequestMapping(value = "/applyout-search", method = {RequestMethod.GET, RequestMethod.POST})
+    public String doSearch(ApplyOutPut outPut, ModelMap modelMap, HttpServletRequest request,@RequestParam(value = "pagenum", required = false)Integer pagenum) {
+        String searchItem = request.getParameter("searchItem");
+        String searchValue = request.getParameter("searchValue");
+        //Integer pagenum = Integer.parseInt(request.getParameter("pagenum"));
+        Integer type = Integer.parseInt(request.getParameter("type"));
+        String page = "exit_apply_wait";
+        System.out.print(searchItem+"   "+searchValue);
+        StringBuffer sql = null;
+        try {
+            sql = commonRepository.getFiledValues(outPut, pagenum);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        if(searchValue!=null||!"".equals(searchValue)) {
+            if(type==1) {
+                page = "exit_apply_wait";
+                sql.append(searchItem + " like '%" + searchValue + "%' AND Status !='" + "已确认'");
+            }else{
+                page = "exit_apply_history";
+                sql.append(searchItem + " like '%" + searchValue + "%' AND Status ='" + "已确认'");
+            }
+        }else{
+            sql.append(" 1 = 1");
+        }
+        int totalpage = jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper(ApplyOutPut.class)).size();
+        List<ApplyEnter> applyouts = jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper(ApplyOutPut.class));
+        logger.debug("待处理的入库申请" + applyouts);
+        modelMap.addAttribute("applys", applyouts);
+        modelMap.addAttribute("totalpage", PageUtil.getTotalPage(totalpage, pagesize));
+
+        return page;
     }
 }

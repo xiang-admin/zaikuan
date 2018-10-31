@@ -32,13 +32,13 @@ spring:
     username: xda265856@163.com
     password: xda265856
     properties:
-                 mail:
-                        smtp:
-                          auth: true
-                          timeout: 25000
-                          ssl.enable: true
-                          socketFactory.class: javax.net.ssl.SSLSocketFactory
-                          starttls.enable: true
-                          socketFactory.port: 465　
-                          port: 465
+      mail:
+        smtp:
+          auth: true
+          timeout: 25000
+          ssl.enable: true
+          socketFactory.class: javax.net.ssl.SSLSocketFactory
+          starttls.enable: true
+          socketFactory.port: 465　
+          port: 465
 

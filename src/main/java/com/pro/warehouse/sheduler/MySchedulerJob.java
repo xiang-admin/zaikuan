@@ -21,7 +21,7 @@ public class MySchedulerJob implements Job {
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         daliyComputeShedule.computeCount();
-        System.out.println("AAAA: The time is now " + dateFormat().format(new Date()));
+        System.out.println("每日统计数量 " + dateFormat().format(new Date()));
     }
 
 }
