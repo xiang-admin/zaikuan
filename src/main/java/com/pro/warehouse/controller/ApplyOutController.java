@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.mail.Store;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -207,15 +208,20 @@ public class ApplyOutController {
         String detail = "";
         //获取料号
         String materialCode = output.getMaterialCode();
+        //因为从页面直接复制的内容可能中间空格数量不符合，所以这里对其中的空格替换成%,以适配确认出库时的空格问题
+        materialCode = materialCode.trim().replaceAll(" +","%");
         //获取仓位
         String code = output.getEnterCode();
         //output.getp
         //查找仓库中的料号
         EntrepotStatus entrepotTarget = null;
         List<EntrepotStatus> entrepotStatus = entrepotStatusRepository.findByEnterCodeAndMaterialCode(code, materialCode);
+        if(entrepotStatus.isEmpty()){
+            throw new StoreException("根据入库料号和入库编号找不到该货物");
+        }
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
-            return "login";
+            return "user-login";
         }
         logger.debug("出库确认：从库存查找：enterid"+code+"料号"+materialCode);
         logger.debug("查找结果："+entrepotStatus);
@@ -284,14 +290,14 @@ public class ApplyOutController {
                 entrepotStatusRepository.save(goodGodds);
                 //修改出库申请状态
                 output.setStatus(ApplyStatus.ENSURE);
-                request.getSession().setAttribute("message","申请出库成功");
+                request.getSession().setAttribute("message","出库确认成功");
                 result="成功";
                 detail="申请出库成功:";
             }else if(goodGodds.getTotalSize()==output.getSize()){
                 //库存大于申请，出库并删除记录
                 entrepotStatusRepository.delete(goodGodds);
                 output.setStatus(ApplyStatus.ENSURE);
-                request.getSession().setAttribute("message","申请出库成功");
+                request.getSession().setAttribute("message","出库确认成功");
                 result="成功";
                 detail="申请出库成功:";
             }else{
@@ -412,7 +418,7 @@ public class ApplyOutController {
             IOUtils.copy(inputStream, servletOutputStream);
             response.flushBuffer();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         } finally {
             try {
                 if (servletOutputStream != null) {

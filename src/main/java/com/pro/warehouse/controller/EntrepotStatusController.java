@@ -55,7 +55,7 @@ public class EntrepotStatusController {
         }
         sql.append(" 1 = 1");
         int totalpage = jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper(EntrepotStatus.class)).size();
-        sql.append(" LIMIT " + (pagenum - 1) * pagesize + "," + pagesize);
+        sql.append(" LIMIT " + (pagenum - 1) * pagesize + "," + pagesize );
         List<EntrepotStatus> entrepots = jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper(EntrepotStatus.class));
         logger.debug("显示仓库列表：" + entrepots);
         modelMap.addAttribute("entrepot", entrepots);
@@ -65,10 +65,12 @@ public class EntrepotStatusController {
     }
 
     @RequestMapping(value = "/entrepot-changestatus", method = {RequestMethod.GET, RequestMethod.POST})
-    public String changeStatus(Long id,int goodProducts,int badProducts) throws Exception {
-        System.err.println("修改库存状态"+id+"  ");
+    public String changeStatus(Long id,int goodProducts,int badProducts,String goodPosition, String badPosition ) throws Exception {
+//        String goodPosition = (String) request.getAttribute("goodPosition");
+//        String badPosition = (String) request.getAttribute("badPosition");
+        logger.info("修改库存状态"+id+"  ");
         List<EntrepotStatus> entrepots = entrepotStatusRepository.findEntrepotStatusByid(id);
-        System.err.println("查找到的库存"+entrepots+"修改良品数量"+goodProducts+"  "+badProducts);
+        logger.info("查找到的库存"+entrepots+"修改良品数量"+goodProducts+"  "+badProducts);
         if(entrepots.size()<=0||entrepots==null){
             throw new Exception("仓库中没有这个货物");
         }else{
@@ -90,11 +92,13 @@ public class EntrepotStatusController {
                 EntrepotStatus goodStatsus = copyEntrepot(entrepotStatus);
                 goodStatsus.setUpdateDate(new Date());
                 goodStatsus.setGoodsStatus("良品");
+                goodStatsus.setPosition(goodPosition);
                 goodStatsus.setTotalSize(goodProducts);
 
                 //封装不良品记录
                 EntrepotStatus badStatus = copyEntrepot(entrepotStatus);
                 badStatus.setGoodsStatus("不良品");
+                badStatus.setPosition(badPosition);
                 goodStatsus.setUpdateDate(new Date());
                 badStatus.setTotalSize(entrepotStatus.getTotalSize()-goodProducts);
                 //删除原先的

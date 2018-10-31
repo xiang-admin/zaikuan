@@ -21,7 +21,7 @@ public class LoginFilter implements Filter {
     private static final Set<String> ALLOWED_PATHS = Collections.unmodifiableSet(new HashSet<>(
             Arrays.asList("/user-login")));
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig){
         System.out.println("init-----------filter");
     }
 
@@ -34,8 +34,7 @@ public class LoginFilter implements Filter {
 
         if (allowedPath) {
             chain.doFilter(req, res);
-        }
-        else {
+        }else{
             User user = (User) ((HttpServletRequest) req).getSession().getAttribute("user");
             if(null==user){
                 ((HttpServletResponse) res).sendRedirect("user-login");

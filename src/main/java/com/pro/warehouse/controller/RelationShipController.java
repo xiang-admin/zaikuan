@@ -35,7 +35,7 @@ public class RelationShipController {
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private CommonRepository<RelationShip> commonRepository;
-    private Integer pagesize=3;//每页显示的条数
+    private Integer pagesize=20;//每页显示的条数
 
     @RequestMapping(value="/relationship-findAll",method = {RequestMethod.GET, RequestMethod.POST} )
     public String getAll(RelationShip relationShip,int pagenum , ModelMap modelMap)

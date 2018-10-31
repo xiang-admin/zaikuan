@@ -17,8 +17,8 @@ public interface EntrepotStatusRepository extends JpaRepository<EntrepotStatus, 
     List<EntrepotStatus> findEntrepotStatusBymaterialCode(String materialCode);
     List<EntrepotStatus> findEntrepotStatusByEnterCode(String enterCode);
     List<EntrepotStatus> findEntrepotStatusByid(Long id);
-
-    @Query("SELECT entrepot FROM EntrepotStatus entrepot where entrepot.enterCode = :enterCode and materialCode=:materialCode")
+   // List<EntrepotStatus> findByEnterCodeAndMaterialCode(String enterCode,String materialCode);
+    @Query("SELECT entrepot FROM EntrepotStatus entrepot where entrepot.enterCode = :enterCode and materialCode like :materialCode")
     List<EntrepotStatus> findByEnterCodeAndMaterialCode(@Param("enterCode") String enterCode,@Param("materialCode") String materialCode);
 
     @Query("SELECT entrepot FROM EntrepotStatus entrepot where entrepot.entranceDate <= :entranceDate and goodsStatus='良品'")

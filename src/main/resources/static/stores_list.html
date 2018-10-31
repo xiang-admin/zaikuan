@@ -618,6 +618,13 @@
                                                <td>不良品数量</td>
                                                <th> <input type="text" placeholder="请输入整数" name="badProducts" id="badProducts" class="col-xs-10 col-sm-40" onblur="compute2()"/></th>
                                            </tr>
+                                            <tr>
+                                                <td>良品仓位</td>
+                                                <th><input type="text" placeholder="" name="goodPosition" id="goodPosition"  class="col-xs-10 col-sm-40"  /></th>
+
+                                                <td>不良品仓位</td>
+                                                <th> <input type="text" placeholder="" name="badPosition" id="badPosition" class="col-xs-10 col-sm-40" /></th>
+                                            </tr>
                                         </table>
                                     </div>
 
@@ -634,10 +641,12 @@
                                             // var statusValue = $('input[name="status"]:checked ').val();
                                             var numberOfGood = $('#goodProducts').val();
                                             var numberOfBad = $('#badProducts').val();
+                                            var goodPosition = $('#goodPosition').val();
+                                            var badPosition = $('#badPosition').val();
                                             //alert("value="+statusValue);
                                             var enterId = $("#setValue").attr("value");
                                             //alert("id="+enterId);
-                                            window.location.href="/entrepot-changestatus?id="+enterId+"&goodProducts="+numberOfGood+"&badProducts="+numberOfBad;
+                                            window.location.href="/entrepot-changestatus?id="+enterId+"&goodProducts="+numberOfGood+"&badProducts="+numberOfBad+"&goodPosition="+goodPosition+"&badPosition="+badPosition;
                                         }
                                         
                                         function compute() {
