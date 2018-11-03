@@ -401,7 +401,7 @@
                                 <div class="col-sm-2">
                                     <label class="block clearfix">
 												<span class="block input-icon input-icon-right">
-													<select class="width-100">
+													<select class="width-100" id="searchItem">
                                                         <option value="outCode">出仓编号</option>
                                                         <option value="enterCode">入仓编号</option>
                                                         <option value="materialCode">入库料号</option>
@@ -412,10 +412,21 @@
 												</span>
                                     </label>
                                 </div>
-                                <input class="col-xs-2" type="text" id="form-field-5" />&nbsp; &nbsp; &nbsp;
-                                <button class="btn btn-xs btn-success" value="搜索" href="" >
-                                    <i class="icon-ok bigger-120">搜索</i>
+                                <input class="col-xs-2" type="text" id="searchValue" th:value="${searchValue}" />&nbsp; &nbsp; &nbsp;
+                                <button class="btn btn-info" type="button" style="height: 30px;" onclick="doSearch()">
+                                    <i class="icon-ok bigger-110"></i>
+                                    搜素
                                 </button>
+                                <script>
+                                    function doSearch(){
+                                        var options=$("#searchItem option:selected");//获取当前选择项.
+                                        var searchItem = options.val();//获取当前选择项的值.
+                                        var searchValue = $("#searchValue").val();
+                                        //alert(searchItem+"   "+searchValue);
+                                        //alert("/applyin-search?pagenum=1&searchItem="+searchItem+"&searchValue="+searchValue+"&type=1");
+                                        window.location.href="/applyout-search?searchItem="+searchItem+"&searchValue="+searchValue+"&pagenum=1&type=2";
+                                    }
+                                </script>
                             </div>
                         </form>
                         <!-- PAGE CONTENT BEGINS -->

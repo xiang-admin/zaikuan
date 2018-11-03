@@ -9,6 +9,7 @@ import com.pro.warehouse.dao.EntrepotStatusRepository;
 import com.pro.warehouse.dao.RelationShipRepository;
 import com.pro.warehouse.pojo.*;
 import com.pro.warehouse.util.DateUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -92,14 +94,25 @@ public class ReportController {
      * 生成库存报表
      */
     @RequestMapping("/report-makeStoreReport")
-    public String makeStoreReport(String endDate, ModelMap modelMap) throws Exception {
+    public String makeStoreReport(String endDate,String goodsFrom, ModelMap modelMap) throws Exception {
         logger.debug("开始生成报表===================");
+        //日期格式：2018-11-04
         String page = "report_stores";
+        List<StockHUB> stockHUBS = new ArrayList<>();
         Date date = DateUtil.stringToDate(endDate);
         logger.debug("截止时间"+DateUtil.dateToString(date));
         List<StockHUB> beforeDate = reportService.generateStoreReoport(date);
+        if(StringUtils.isEmpty(goodsFrom.trim())){
+            stockHUBS = beforeDate;
+        }else{
+            for(StockHUB stockHUB:beforeDate){
+                if(stockHUB.getSupplierName().equals(goodsFrom.trim())){
+                    stockHUBS.add(stockHUB);
+                }
+            }
+        }
         logger.debug("报表中的信息:"+beforeDate);
-        modelMap.addAttribute("report",beforeDate);
+        modelMap.addAttribute("report",stockHUBS);
         modelMap.addAttribute("date",endDate);
         logger.debug("报表生成结束===================");
         return page;

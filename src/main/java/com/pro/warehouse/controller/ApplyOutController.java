@@ -178,7 +178,7 @@ public class ApplyOutController {
         }
         Long userId = user.getId();
         applyOutPut.setApplyPersonid(user.getUsername());
-        List<EntrepotStatus> entrots = entrepotStatusRepository.findByEnterCodeAndMaterialCode(applyOutPut.getEnterCode(),applyOutPut.getMaterialCode());
+        List<EntrepotStatus> entrots = entrepotStatusRepository.findByEnterCodeAndMaterialCode(applyOutPut.getEnterCode(),applyOutPut.getMaterialCode().trim().replaceAll(" +","%"));
         logger.debug("出库申请：从库存查找："+ applyOutPut.getEnterCode() + "  " + applyOutPut.getMaterialCode());
         logger.debug("查找结果："+entrots);
         if (entrots.size() > 0) {
@@ -471,6 +471,8 @@ public class ApplyOutController {
         List<ApplyEnter> applyouts = jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper(ApplyOutPut.class));
         logger.debug("待处理的入库申请" + applyouts);
         modelMap.addAttribute("applys", applyouts);
+        modelMap.addAttribute("searchValue",searchValue);
+        modelMap.addAttribute("searchItem",searchItem);
         modelMap.addAttribute("totalpage", PageUtil.getTotalPage(totalpage, pagesize));
 
         return page;

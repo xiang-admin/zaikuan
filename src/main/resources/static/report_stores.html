@@ -430,10 +430,12 @@
             <form action="/report-makeStoreReport" id="storeDate">
                 <div style="float: left;font-size: 25px;">截止至：</div>
                 <div style="float: left;"><input th:value="${date}" type="date" name="endDate" id="endDate"/></div>
-
+                <div style="float: left;font-size: 10px;width: 80px;color:red;">若您的浏览器不支持日期控件，请手动输入日期，格式如：2018-11-04</div>
+                <div style="float: left;font-size: 25px;">供应商名称：</div>
+                <div style="float: left;"><input name="goodsFrom" placeholder="请注意前后空格" /></div>
                 <div style="float: left;">
                     <button type="submit" class="btn btn-primary active" data-toggle="button" style="height: 35px;" onclick="submitForm()">生成报表</button>
-                    <button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="toExcel()">导出Excek</button>
+                    <button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="toExcel()">导出Excel</button>
                 </div>
             </form>
             <script>

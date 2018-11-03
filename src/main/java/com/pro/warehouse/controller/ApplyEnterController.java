@@ -341,6 +341,8 @@ public class ApplyEnterController {
         List<ApplyEnter> applyEnters = jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper(ApplyEnter.class));
         logger.debug("待处理的入库申请" + applyEnters);
         modelMap.addAttribute("applys", applyEnters);
+        modelMap.addAttribute("searchValue",searchValue);
+        modelMap.addAttribute("searchItem",searchItem);
         modelMap.addAttribute("totalpage", PageUtil.getTotalPage(totalpage, pagesize));
 
         return page;

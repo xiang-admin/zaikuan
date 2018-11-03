@@ -433,11 +433,13 @@
     <form action="/report-makeOutputReport" id="storeDate">
         <div style="float: left;font-size: 25px;">开始时间：</div>
         <div style="float: left;"><input th:value="${startDate}" type="date" name="startDate" id="startDate"/></div>
+        <div style="float: left;font-size: 10px;width: 80px;color:red;">若您的浏览器不支持日期控件，请手动输入日期，格式如：2018-11-04</div>
         <div style="float: left;font-size: 25px;">截止时间：</div>
         <div style="float: left;"><input th:value="${endDate}" type="date" name="endDate" id="endDate"/></div>
+        <div style="float: left;font-size: 10px;width: 80px;color:red;">若您的浏览器不支持日期控件，请手动输入日期，格式如：2018-11-04</div>
         <div style="float: left;">
             <button type="submit" class="btn btn-primary active" data-toggle="button" style="height: 35px;" onclick="submitForm()">生成报表</button>
-            <button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="toExcel()" >导出Excek</button>
+            <button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="toExcel()" >导出Excel</button>
         </div>
     </form>
     <script>
