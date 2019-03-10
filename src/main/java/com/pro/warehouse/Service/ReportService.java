@@ -51,7 +51,7 @@ public class ReportService {
                 System.out.println("找到供货商编号");
                 stores.add(stockHUB);
             }else{
-                throw new Exception("供货商"+status.getSupplyName()+"没有在供、提关系中设置");
+                throw new Exception("供货商【"+status.getSupplyName()+"】没有在供、提关系中设置");
             }
             //VendorCode就是供货商编号
             //2.VendorCode暂时有疑问，暂不处理，先使用默认值

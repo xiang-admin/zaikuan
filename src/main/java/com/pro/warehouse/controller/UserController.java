@@ -235,8 +235,14 @@ public class UserController {
         return "login";
     }
 
+    /**
+     * 推出系统
+     * @param session
+     * @return
+     */
     @RequestMapping("/user-logout")
     public String logOut(HttpSession session) {
+        //推出系统，注销seeesion,跳转到登陆页面
         User user = (User)session.getAttribute("user");
         if(user!=null) {
             session.removeAttribute("user");

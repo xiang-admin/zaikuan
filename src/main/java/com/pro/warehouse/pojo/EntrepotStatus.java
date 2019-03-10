@@ -22,7 +22,7 @@ public class EntrepotStatus {
 	private String enterCode;
 	// 料号
 	private String materialCode;
-	// 入库单位
+	// 供应商
 	private String supplyName;
 	// 发票号码
 	private String taxCode;

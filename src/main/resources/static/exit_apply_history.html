@@ -412,7 +412,7 @@
 												</span>
                                     </label>
                                 </div>
-                                <input class="col-xs-2" type="text" id="searchValue" th:value="${searchValue}" />&nbsp; &nbsp; &nbsp;
+                                <input type="text" id="searchValue" th:value="${searchValue}" />&nbsp; &nbsp; &nbsp;
                                 <button class="btn btn-info" type="button" style="height: 30px;" onclick="doSearch()">
                                     <i class="icon-ok bigger-110"></i>
                                     搜素
@@ -424,7 +424,8 @@
                                         var searchValue = $("#searchValue").val();
                                         //alert(searchItem+"   "+searchValue);
                                         //alert("/applyin-search?pagenum=1&searchItem="+searchItem+"&searchValue="+searchValue+"&type=1");
-                                        window.location.href="/applyout-search?searchItem="+searchItem+"&searchValue="+searchValue+"&pagenum=1&type=2";
+                                        var uri = "/applyout-search?searchItem="+searchItem+"&searchValue="+searchValue+"&pagenum=1&type=2";
+                                        window.location.href=encodeURI(uri);
                                     }
                                 </script>
                             </div>
