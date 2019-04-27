@@ -5,6 +5,8 @@
 - 运行WarehouseApplication.java
 - 访问:http://127.0.0.1:8880/user-login
 
+> 具体部署过程参考ISSUE:https://github.com/virtuex/store_managesys/issues/5
+
 # 用户手册
 
 
